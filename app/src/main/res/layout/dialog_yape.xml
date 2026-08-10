@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:gravity="center"
-    android:background="#FFFFFF">
+    android:background="@color/fondo_card">
 
     <ImageView
         android:layout_width="56dp"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Escanea el código QR para Yapear"
         android:textSize="14sp"
-        android:textColor="#1A1A2E"
+        android:textColor="@color/texto_principal"
         android:textStyle="bold"
         android:layout_marginBottom="12dp"/>
 
@@ -31,7 +31,7 @@
         android:layout_height="160dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="2dp"
-        app:cardBackgroundColor="#7B2D8B"
+        app:cardBackgroundColor="@color/morado_scanner"
         android:layout_marginBottom="12dp">
 
         <ImageView
@@ -52,7 +52,7 @@
         android:text="Monto a pagar: S/ 0.00"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#7B2D8B"
+        android:textColor="@color/morado_scanner"
         android:layout_marginBottom="16dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -60,10 +60,10 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="Pago recibido"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/texto_sobre_verde"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:backgroundTint="#4CAF50"
+        app:backgroundTint="@color/verde_nav"
         app:cornerRadius="10dp"/>
 
 </LinearLayout>

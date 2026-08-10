@@ -5,32 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="@color/fondo_general">
 
     <!-- ═══ TOOLBAR ═══ -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/fondo_card"
         app:elevation="2dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
-
-            app:navigationIconTint="#1A1A2E"
+            android:background="@color/fondo_card"
+            app:navigationIconTint="@color/texto_principal"
             app:title="Inventario de Productos"
             app:titleCentered="true"
-            app:titleTextColor="#1A1A2E" />
+            app:titleTextColor="@color/texto_principal" />
 
-        <!-- app:navigationIcon="@drawable/ic_arrow_back"
-        app:chipBackgroundColor="@color/chip_bg_selector"
-        app:chipBackgroundColor="@color/chip_bg_selector"
-        app:chipBackgroundColor="@color/chip_bg_selector"
-        app:chipBackgroundColor="@color/chip_bg_selector"-->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,8 +47,7 @@
                     android:textSize="12sp"
                     android:checked="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-
-                    app:chipStrokeColor="#E2E8F0"
+                    app:chipStrokeColor="@color/borde_card"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -64,8 +57,7 @@
                     android:text="Lácteos"
                     android:textSize="12sp"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-
-                    app:chipStrokeColor="#E2E8F0"
+                    app:chipStrokeColor="@color/borde_card"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -75,8 +67,7 @@
                     android:text="Abarrotes"
                     android:textSize="12sp"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-
-                    app:chipStrokeColor="#E2E8F0"
+                    app:chipStrokeColor="@color/borde_card"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -86,8 +77,7 @@
                     android:text="Verduras"
                     android:textSize="12sp"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-
-                    app:chipStrokeColor="#E2E8F0"
+                    app:chipStrokeColor="@color/borde_card"
                     app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -101,14 +91,14 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
-            android:background="#F8F9FA">
+            android:background="@color/fondo_general">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
                 android:text=""
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
@@ -117,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.45"
                 android:text="ARTÍCULOS"
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.06" />
@@ -127,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:text="DESCRIPCIÓN"
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.06" />
@@ -137,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.15"
                 android:text="Cantidad"
-                android:textColor="#64748B"
+                android:textColor="@color/texto_secundario"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:gravity="end" />
@@ -147,7 +137,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E2E8F0" />
+            android:background="@color/borde_card" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -176,7 +166,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#E2E8F0"
+                android:background="@color/borde_card"
                 android:layout_marginTop="8dp" />
 
             <LinearLayout
@@ -192,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Stock a Sumar :"
-                    android:textColor="#1A1A2E"
+                    android:textColor="@color/texto_principal"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -204,7 +194,7 @@
                     app:boxCornerRadiusTopEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxStrokeColor="#FFC107">
+                    app:boxStrokeColor="@color/amarillo_accion">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etStockSumar"
@@ -212,6 +202,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:hint="0"
+                        android:textColor="@color/texto_principal"
                         android:inputType="number"
                         android:textSize="14sp"
                         tools:ignore="TouchTargetSizeCheck" />
@@ -231,12 +222,12 @@
                 android:text="Editar"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_sobre_amarillo"
                 app:icon="@android:drawable/ic_menu_edit"
-                app:iconTint="#1A1A2E"
+                app:iconTint="@color/texto_sobre_amarillo"
                 app:iconSize="18dp"
                 app:iconPadding="8dp"
-                app:backgroundTint="#FFC107"
+                app:backgroundTint="@color/amarillo_accion"
                 app:cornerRadius="24dp" />
 
         </LinearLayout>
@@ -249,10 +240,9 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_gravity="bottom"
-        android:background="#4CAF50"
+        android:background="@color/verde_nav"
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
-
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_nav_menu" />
 

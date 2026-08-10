@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/fondo_general"
     tools:context=".RegistroProductoActivity">
 
     <!-- ═══ TOOLBAR ═══ -->
@@ -13,19 +13,19 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/fondo_card"
         app:elevation="3dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
+            android:background="@color/fondo_card"
             app:navigationIcon="@drawable/icono_regresar_pantalla"
-            app:navigationIconTint="#1A1A2E"
+            app:navigationIconTint="@color/texto_principal"
             app:title="Registro de Producto"
             app:titleCentered="true"
-            app:titleTextColor="#1A1A2E"
+            app:titleTextColor="@color/texto_principal"
             app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -62,13 +62,13 @@
                     android:layout_height="120dp"
                     app:cardCornerRadius="14dp"
                     app:cardElevation="4dp"
-                    app:strokeColor="#E0E0E0"
+                    app:strokeColor="@color/borde_card"
                     app:strokeWidth="1dp">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#F0F4F8">
+                        android:background="@color/fondo_general">
 
                         <ImageView
                             android:id="@+id/ivProducto"
@@ -91,13 +91,13 @@
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@android:drawable/ic_menu_gallery"
-                                app:tint="#BDBDBD" />
+                                app:tint="@color/texto_hint" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Sin foto"
-                                android:textColor="#BDBDBD"
+                                android:textColor="@color/texto_hint"
                                 android:textSize="11sp"
                                 android:layout_marginTop="4dp" />
 
@@ -128,7 +128,7 @@
                         app:iconTint="#FFFFFF"
                         app:iconSize="18dp"
                         app:iconPadding="6dp"
-                        app:backgroundTint="#7B2D8B"
+                        app:backgroundTint="@color/morado_scanner"
                         app:cornerRadius="22dp"
                         android:layout_marginBottom="10dp" />
 
@@ -139,13 +139,13 @@
                         android:layout_height="40dp"
                         android:text="Galería"
                         android:textSize="12sp"
-                        android:textColor="#7B2D8B"
+                        android:textColor="@color/morado_scanner"
                         app:icon="@android:drawable/ic_menu_gallery"
-                        app:iconTint="#7B2D8B"
+                        app:iconTint="@color/morado_scanner"
                         app:iconSize="16dp"
                         app:iconPadding="6dp"
                         app:backgroundTint="@android:color/transparent"
-                        app:strokeColor="#7B2D8B"
+                        app:strokeColor="@color/morado_scanner"
                         app:strokeWidth="1.5dp"
                         app:cornerRadius="20dp"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
@@ -158,7 +158,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#FFC107"
+                android:background="@color/amarillo_accion"
                 android:layout_marginBottom="16dp"
                 android:alpha="0.5" />
 
@@ -167,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre del Producto"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -181,14 +181,15 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#FFC107"
-                app:hintTextColor="#FFC107">
+                app:boxStrokeColor="@color/amarillo_accion"
+                app:hintTextColor="@color/amarillo_accion">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNombreProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Ej: Coca Cola 3 litros"
+                    android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:inputType="textCapSentences" />
 
@@ -212,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Stock Actual"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/texto_principal"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp" />
@@ -225,14 +226,15 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusBottomEnd="10dp"
-                        app:boxStrokeColor="#FFC107"
-                        app:hintTextColor="#FFC107">
+                        app:boxStrokeColor="@color/amarillo_accion"
+                        app:hintTextColor="@color/amarillo_accion">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etStockActual"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="0"
+                            android:textColor="@color/texto_principal"
                             android:textSize="14sp"
                             android:inputType="number" />
 
@@ -250,7 +252,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Categoría"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/texto_principal"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp" />
@@ -263,14 +265,15 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusBottomEnd="10dp"
-                        app:boxStrokeColor="#FFC107"
-                        app:hintTextColor="#FFC107">
+                        app:boxStrokeColor="@color/amarillo_accion"
+                        app:hintTextColor="@color/amarillo_accion">
 
                         <AutoCompleteTextView
                             android:id="@+id/spinnerCategoria"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Seleccione"
+                            android:textColor="@color/texto_principal"
                             android:inputType="none"
                             android:textSize="13sp" />
 
@@ -285,7 +288,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Proveedor"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -299,14 +302,15 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#FFC107"
-                app:hintTextColor="#FFC107">
+                app:boxStrokeColor="@color/amarillo_accion"
+                app:hintTextColor="@color/amarillo_accion">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etProveedor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Ej: Empresa AJE"
+                    android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:inputType="textCapSentences" />
 
@@ -317,7 +321,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Precios"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -341,7 +345,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Compra"
-                        android:textColor="#64748B"
+                        android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
 
@@ -353,7 +357,7 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusBottomEnd="10dp"
-                        app:boxStrokeColor="#FFC107"
+                        app:boxStrokeColor="@color/amarillo_accion"
                         app:prefixText="S/ ">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -361,6 +365,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="0.00"
+                            android:textColor="@color/texto_principal"
                             android:textSize="14sp"
                             android:inputType="numberDecimal"
                             tools:text="1.50" />
@@ -381,7 +386,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Venta"
-                        android:textColor="#64748B"
+                        android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
 
@@ -393,7 +398,7 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusBottomEnd="10dp"
-                        app:boxStrokeColor="#FFC107"
+                        app:boxStrokeColor="@color/amarillo_accion"
                         app:prefixText="S/ ">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -401,6 +406,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="0.00"
+                            android:textColor="@color/texto_principal"
                             android:textSize="14sp"
                             android:inputType="numberDecimal"
                             tools:text="2.00" />
@@ -420,7 +426,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ganancia"
-                        android:textColor="#64748B"
+                        android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
 
@@ -429,9 +435,9 @@
                         android:layout_height="48dp"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="0dp"
-                        app:strokeColor="#4CAF50"
+                        app:strokeColor="@color/verde_nav"
                         app:strokeWidth="1dp"
-                        app:cardBackgroundColor="#E8F5E9">
+                        app:cardBackgroundColor="@color/fondo_card">
 
                         <TextView
                             android:id="@+id/tvGanancia"
@@ -439,7 +445,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:text="S/ 0.00"
-                            android:textColor="#2E7D32"
+                            android:textColor="@color/verde_ganancia"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             tools:text="S/ 0.50" />
@@ -455,7 +461,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Código Único / Barras"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -477,14 +483,15 @@
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxStrokeColor="#FFC107"
-                    app:hintTextColor="#FFC107">
+                    app:boxStrokeColor="@color/amarillo_accion"
+                    app:hintTextColor="@color/amarillo_accion">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCodigoBarras"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Escanear o ingresar código"
+                        android:textColor="@color/texto_principal"
                         android:textSize="13sp"
                         android:inputType="number"
                         android:fontFamily="monospace"
@@ -503,7 +510,7 @@
                     app:iconTint="#FFFFFF"
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
-                    app:backgroundTint="#7B2D8B"
+                    app:backgroundTint="@color/morado_scanner"
                     app:cornerRadius="14dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:contentDescription="Abrir escáner" />
@@ -515,7 +522,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Descripción"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -529,8 +536,8 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
-                app:boxStrokeColor="#FFC107"
-                app:hintTextColor="#FFC107"
+                app:boxStrokeColor="@color/amarillo_accion"
+                app:hintTextColor="@color/amarillo_accion"
                 app:counterEnabled="true"
                 app:counterMaxLength="200">
 
@@ -539,6 +546,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Ej: Esta bebida se vende mucho en tiempos de verano"
+                    android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:minLines="3"
                     android:maxLines="5"
@@ -558,13 +566,13 @@
                 android:text="Guardar"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_sobre_amarillo"
                 app:icon="@android:drawable/ic_menu_save"
                 app:iconGravity="textStart"
                 app:iconSize="20dp"
                 app:iconPadding="8dp"
-                app:iconTint="#1A1A2E"
-                app:backgroundTint="#FFC107"
+                app:iconTint="@color/texto_sobre_amarillo"
+                app:backgroundTint="@color/amarillo_accion"
                 app:cornerRadius="30dp"
                 app:elevation="4dp"
                 android:layout_marginBottom="8dp" />
@@ -579,7 +587,7 @@
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_gravity="bottom"
-        android:background="#4CAF50"
+        android:background="@color/verde_nav"
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
         app:labelVisibilityMode="unlabeled"

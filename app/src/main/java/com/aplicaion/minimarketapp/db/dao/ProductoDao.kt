@@ -17,6 +17,9 @@ interface ProductoDao {
     @Update
     suspend fun update(producto: Producto)
 
+    @Update
+    suspend fun actualizar(producto: Producto)
+
     @Delete
     suspend fun delete(producto: Producto)
 
@@ -31,6 +34,9 @@ interface ProductoDao {
 
     @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): Producto?
+
+    @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
+    fun getByIdLiveData(id: Int): androidx.lifecycle.LiveData<Producto>
 
     @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")
     suspend fun updateStock(productoId: Int, nuevoStock: Int)

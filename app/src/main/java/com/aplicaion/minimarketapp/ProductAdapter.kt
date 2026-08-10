@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.aplicaion.minimarketapp.db.entity.Producto
 import com.aplicaion.minimarketapp.utils.formatSoles
@@ -24,6 +25,7 @@ class ProductAdapter(
         val tvCategoria: TextView = view.findViewById(R.id.tvCategoria)
         val tvPrecio: TextView = view.findViewById(R.id.tvPrecio)
         val btnAgregar: MaterialButton = view.findViewById(R.id.btnAgregar)
+        val ivDetalle: ImageView = view.findViewById(R.id.ivDetalle)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
@@ -38,12 +40,13 @@ class ProductAdapter(
         holder.tvPrecio.text = prod.precioVenta.formatSoles()
 
         // Stock alert badge check: if stock < 5, highlight or append low stock notice
+        val context = holder.itemView.context
         if (prod.stock < 5) {
             holder.tvCategoria.text = "Stock: ${prod.stock} (¡ALERTA STOCK BAJO!)"
-            holder.tvCategoria.setTextColor(Color.RED)
+            holder.tvCategoria.setTextColor(ContextCompat.getColor(context, R.color.rojo_alerta))
         } else {
             holder.tvCategoria.text = "Stock: ${prod.stock} unds"
-            holder.tvCategoria.setTextColor(Color.parseColor("#94A3B8"))
+            holder.tvCategoria.setTextColor(ContextCompat.getColor(context, R.color.texto_secundario))
         }
 
         if (!prod.imagenPath.isNull_or_blank_safe()) {
@@ -57,6 +60,13 @@ class ProductAdapter(
 
         holder.btnAgregar.setOnClickListener {
             onAgregarClick(prod)
+        }
+
+        holder.ivDetalle.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = android.content.Intent(context, RegistroProductoActivity::class.java)
+            intent.putExtra("PRODUCTO_ID", prod.id.toLong())
+            context.startActivity(intent)
         }
     }
 

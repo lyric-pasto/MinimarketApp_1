@@ -27,7 +27,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:textColor="@color/black"
+            android:textColor="@color/texto_principal"
             android:text="Registro de Usuario"/>
 
     </LinearLayout>
@@ -141,6 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Solicitar creación de usuario al Administrador"
+            android:textColor="@color/texto_principal"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="15dp"/>
 
@@ -149,9 +150,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tramitar Acceso"
+            android:textColor="@color/texto_sobre_verde"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            app:backgroundTint="#4CAF50"
+            app:backgroundTint="@color/verde_nav"
             app:cornerRadius="8dp"/>
     </LinearLayout>
 </LinearLayout>

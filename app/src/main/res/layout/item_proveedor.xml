@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/fondo_card">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre del Proveedor"
-            android:textColor="#1A1A2E"
+            android:textColor="@color/texto_principal"
             android:textSize="15sp"
             android:textStyle="bold"/>
 
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RUC: 20100123456"
-            android:textColor="#64748B"
+            android:textColor="@color/texto_secundario"
             android:textSize="13sp"
             android:layout_marginTop="2dp"/>
 
@@ -37,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cel: 987654321 - Correo: contacto@aje.com"
-            android:textColor="#64748B"
+            android:textColor="@color/texto_secundario"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
 

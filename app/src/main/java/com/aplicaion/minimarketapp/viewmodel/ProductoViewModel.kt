@@ -38,6 +38,22 @@ class ProductoViewModel(
         return productoRepository.getProductosByCategoria(categoriaId).asLiveData()
     }
 
+    fun getById(id: Long): LiveData<Producto> = productoRepository.getByIdLiveData(id.toInt())
+
+    fun getById(id: Int): LiveData<Producto> = productoRepository.getByIdLiveData(id)
+
+    fun actualizarProducto(producto: Producto) {
+        _guardarState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                productoRepository.actualizar(producto)
+                _guardarState.value = Resource.Success("Producto actualizado correctamente")
+            } catch (e: Exception) {
+                _guardarState.value = Resource.Error("Error al actualizar: ${e.message}")
+            }
+        }
+    }
+
     fun calcularGanancia(precioCompra: Double, precioVenta: Double): Double {
         return Math.max(0.0, precioVenta - precioCompra)
     }

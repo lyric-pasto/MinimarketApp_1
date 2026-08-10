@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores fijos (no cambian en oscuro) -->
+    <color name="verde_nav">#4CAF50</color>
+    <color name="amarillo_accion">#FFC107</color>
+    <color name="morado_scanner">#7B2D8B</color>
+
+    <!-- Colores adaptivos — modo oscuro -->
+    <color name="texto_principal">#F1F5F9</color>
+    <color name="texto_secundario">#94A3B8</color>
+    <color name="texto_hint">#64748B</color>
+    <color name="fondo_general">#0F172A</color>
+    <color name="fondo_card">#1E293B</color>
+    <color name="borde_card">#334155</color>
+    <color name="texto_sobre_amarillo">#1A1A2E</color>
+    <color name="texto_sobre_verde">#FFFFFF</color>
+
+    <!-- Alertas y estados -->
+    <color name="rojo_alerta">#FCA5A5</color>
+    <color name="verde_ganancia">#86EFAC</color>
+    <color name="amarillo_texto">#FDE68A</color>
+</resources>

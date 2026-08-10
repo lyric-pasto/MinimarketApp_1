@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/fondo_card"
+    android:padding="24dp">
+
+    <!-- Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:background="@color/borde_card"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Título -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pago en Efectivo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/texto_principal"
+        android:layout_marginBottom="6dp"/>
+
+    <!-- Total a cobrar -->
+    <TextView
+        android:id="@+id/tvTotalCobrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: S/. 0.00"
+        android:textSize="15sp"
+        android:textColor="@color/texto_secundario"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Campo monto recibido -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monto recibido del cliente"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/texto_principal"
+        android:layout_marginBottom="6dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxStrokeColor="@color/amarillo_accion"
+        app:prefixText="S/. ">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etMontoRecibido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:textSize="18sp"
+            android:textColor="@color/texto_principal"
+            android:inputType="numberDecimal"
+            android:gravity="center"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Card vuelto -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardVuelto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/verde_nav"
+        app:strokeWidth="1.5dp"
+        app:cardBackgroundColor="@color/fondo_general">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recibido"
+                    android:textSize="11sp"
+                    android:textColor="@color/texto_secundario"/>
+                <TextView
+                    android:id="@+id/tvRecibido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/texto_principal"
+                    android:text="S/. 0.00"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:background="@color/borde_card"
+                android:layout_marginHorizontal="12dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vuelto"
+                    android:textSize="11sp"
+                    android:textColor="@color/texto_secundario"/>
+                <TextView
+                    android:id="@+id/tvVuelto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/verde_ganancia"
+                    android:text="S/. 0.00"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Botón confirmar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirmarEfectivo"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Confirmar Venta"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/texto_sobre_amarillo"
+        app:backgroundTint="@color/amarillo_accion"
+        app:cornerRadius="14dp"
+        android:enabled="false"/>
+
+</LinearLayout>

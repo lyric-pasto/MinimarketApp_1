@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Gestor de Ventas"
             android:textAlignment="center"
+            android:textColor="@color/texto_secundario"
             android:textSize="15sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -96,7 +97,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:text="Ingresar"
-            android:backgroundTint="#5AC84C"
+            android:textColor="@color/texto_sobre_verde"
+            android:backgroundTint="@color/verde_nav"
             app:cornerRadius="8dp" />
 
         <LinearLayout
@@ -119,12 +121,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textColor="@color/texto_secundario"
                 android:text="¿Olvidaste tu contraseña?"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="#0939B1"
+                android:textColor="@color/verde_ganancia"
                 android:id="@+id/btnRecuperarCorreo"
                 android:text="Recuperar con correo"
                 android:textStyle="bold"/>
@@ -141,13 +144,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textColor="@color/texto_secundario"
                 android:text="¿Aún no tenes una cuenta?"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="¿Registrate aquí?"
-                android:textColor="#0939B1"
+                android:textColor="@color/verde_ganancia"
                 android:textStyle="bold"
                 android:id="@+id/btnRegistroUsuario"/>
         </LinearLayout>

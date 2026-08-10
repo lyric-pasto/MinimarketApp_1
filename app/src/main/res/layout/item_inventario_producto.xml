@@ -21,7 +21,7 @@
             android:layout_marginEnd="12dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="1dp"
-            app:strokeColor="#F1F5F9"
+            app:strokeColor="@color/borde_card"
             app:strokeWidth="1dp">
 
             <ImageView
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:background="#F8F9FA" />
+                android:background="@color/fondo_general" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Coca Cola 500ml"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:maxLines="2"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="17454111774"
-                android:textColor="#94A3B8"
+                android:textColor="@color/texto_secundario"
                 android:textSize="11sp"
                 android:fontFamily="monospace"
                 android:layout_marginTop="2dp" />
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="S/. 2.50"
-                android:textColor="#4CAF50"
+                android:textColor="@color/verde_ganancia"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -95,7 +95,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@android:drawable/ic_media_next"
-                app:tint="#CBD5E1"
+                app:tint="@color/texto_secundario"
                 android:layout_marginBottom="4dp"
                 android:layout_gravity="end" />
 
@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="50 unds"
-                    android:textColor="#64748B"
+                    android:textColor="@color/texto_secundario"
                     android:textSize="11sp"
                     android:layout_marginEnd="4dp" />
 
@@ -123,9 +123,9 @@
                     android:padding="0dp"
                     app:icon="@android:drawable/ic_input_add"
                     app:iconSize="14dp"
-                    app:iconTint="#FFFFFF"
+                    app:iconTint="@color/texto_sobre_verde"
                     app:iconPadding="0dp"
-                    app:backgroundTint="#4CAF50"
+                    app:backgroundTint="@color/verde_nav"
                     app:cornerRadius="6dp"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:contentDescription="Sumar stock" />
@@ -139,7 +139,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#F1F5F9"
+        android:background="@color/borde_card"
         android:layout_marginHorizontal="16dp" />
 
 </LinearLayout>

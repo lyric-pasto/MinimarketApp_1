@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F8F9FA">
+    android:background="@color/fondo_general">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4CAF50"
+        android:background="@color/verde_nav"
         app:navigationIcon="@drawable/icono_regresar_pantalla"
-        app:navigationIconTint="#FFFFFF"
+        app:navigationIconTint="@color/texto_sobre_verde"
         app:title="Carrito de Compras"
-        app:titleTextColor="#FFFFFF"/>
+        app:titleTextColor="@color/texto_sobre_verde"/>
 
     <!-- Lista de Items en Carrito -->
     <androidx.recyclerview.widget.RecyclerView
@@ -34,7 +34,7 @@
         android:layout_margin="12dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF">
+        app:cardBackgroundColor="@color/fondo_card">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,14 +52,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Importe Gravado"
-                    android:textColor="#64748B"
+                    android:textColor="@color/texto_secundario"
                     android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/tvSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="S/ 0.00"
-                    android:textColor="#1A1A2E"
+                    android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -74,14 +74,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Impuestos IGV 18%"
-                    android:textColor="#64748B"
+                    android:textColor="@color/texto_secundario"
                     android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/tvIgv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="S/ 0.00"
-                    android:textColor="#1A1A2E"
+                    android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -89,7 +89,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#E2E8F0"
+                android:background="@color/borde_card"
                 android:layout_marginVertical="8dp"/>
 
             <LinearLayout
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TOTAL"
-                    android:textColor="#1A1A2E"
+                    android:textColor="@color/texto_principal"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
                 <TextView
@@ -110,12 +110,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="S/ 0.00"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/verde_ganancia"
                     android:textSize="22sp"
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- Botón CONTINUAR verde #4CAF50 -->
+            <!-- Botón CONTINUAR verde -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnContinuar"
                 android:layout_width="match_parent"
@@ -123,8 +123,8 @@
                 android:text="CONTINUAR"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:backgroundTint="#4CAF50"
-                android:textColor="#FFFFFF"
+                app:backgroundTint="@color/verde_nav"
+                android:textColor="@color/texto_sobre_verde"
                 app:cornerRadius="12dp"/>
 
         </LinearLayout>

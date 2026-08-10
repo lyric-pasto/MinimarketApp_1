@@ -1,18 +1,64 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.MiniMarketApp" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#4CAF50</item>
+    <style name="Theme.MiniMarketApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Colores principales -->
+        <item name="colorPrimary">@color/verde_nav</item>
         <item name="colorPrimaryVariant">#388E3C</item>
-        <item name="colorSecondary">#FFC107</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorOnSecondary">#1A1A2E</item>
+        <item name="colorSecondary">@color/amarillo_accion</item>
+        <item name="colorOnPrimary">@color/texto_sobre_verde</item>
+        <item name="colorOnSecondary">@color/texto_sobre_amarillo</item>
+
+        <!-- Fondos -->
+        <item name="android:windowBackground">@color/fondo_general</item>
+        <item name="android:colorBackground">@color/fondo_general</item>
+
+        <!-- Textos globales -->
+        <item name="android:textColorPrimary">@color/texto_principal</item>
+        <item name="android:textColorSecondary">@color/texto_secundario</item>
+        <item name="android:textColorHint">@color/texto_hint</item>
+
+        <!-- TextInputLayout global -->
+        <item name="boxStrokeColor">@color/amarillo_accion</item>
+        <item name="hintTextColor">@color/amarillo_accion</item>
+
+        <!-- MaterialCardView global -->
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
     </style>
 
     <style name="Theme.MinimarketApp" parent="Theme.MiniMarketApp" />
+
+    <!-- Card con fondo adaptivo -->
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/fondo_card</item>
+        <item name="strokeColor">@color/borde_card</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Botón amarillo estándar -->
+    <style name="Btn.Amarillo" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/amarillo_accion</item>
+        <item name="android:textColor">@color/texto_sobre_amarillo</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+
+    <!-- Botón verde estándar -->
+    <style name="Btn.Verde" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/verde_nav</item>
+        <item name="android:textColor">@color/texto_sobre_verde</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+
+    <!-- Botón morado estándar -->
+    <style name="Btn.Morado" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/morado_scanner</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
 
     <style name="titulo_grande">
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/texto_principal</item>
     </style>
 </resources>

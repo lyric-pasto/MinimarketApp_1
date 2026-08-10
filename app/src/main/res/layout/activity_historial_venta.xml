@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F8F9FA">
+    android:background="@color/fondo_general">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4CAF50"
+        android:background="@color/verde_nav"
         app:navigationIcon="@drawable/icono_regresar_pantalla"
-        app:navigationIconTint="#FFFFFF"
+        app:navigationIconTint="@color/texto_sobre_verde"
         app:title="Historial de Ventas"
-        app:titleTextColor="#FFFFFF"/>
+        app:titleTextColor="@color/texto_sobre_verde"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistorial"

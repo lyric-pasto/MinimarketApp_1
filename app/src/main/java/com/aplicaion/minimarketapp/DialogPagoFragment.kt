@@ -68,43 +68,8 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
     }
 
     private fun procesarPagoEfectivo(total: Double) {
-        val context = requireContext()
-        val etMontoRecibido = EditText(context).apply {
-            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-            hint = "Monto recibido (S/)"
-            setPadding(32, 24, 32, 24)
-        }
-
-        AlertDialog.Builder(context)
-            .setTitle("Pago en Efectivo")
-            .setMessage("Monto Total: ${total.formatSoles()}\n\nIngrese el monto recibido:")
-            .setView(etMontoRecibido)
-            .setPositiveButton("Siguiente") { dialog, _ ->
-                dialog.dismiss()
-                val recibidoStr = etMontoRecibido.text.toString().trim()
-                val recibido = recibidoStr.toDoubleOrNull() ?: 0.0
-                if (recibido < total) {
-                    Toast.makeText(context, "Monto recibido insuficiente", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-                val vuelto = recibido - total
-                mostrarConfirmacionEfectivo(recibido, vuelto, "EFECTIVO")
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
-    private fun mostrarConfirmacionEfectivo(recibido: Double, vuelto: Double, metodoPago: String) {
-        val context = requireContext()
-        AlertDialog.Builder(context)
-            .setTitle("Confirmar Venta")
-            .setMessage("Recibido: ${recibido.formatSoles()}  |  Vuelto: ${vuelto.formatSoles()}")
-            .setPositiveButton("Confirmar") { dialog, _ ->
-                dialog.dismiss()
-                ejecutarRegistroVenta(metodoPago)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        val pagoEfectivo = PagoEfectivoFragment()
+        pagoEfectivo.show(parentFragmentManager, "PagoEfectivoFragment")
     }
 
     private fun procesarPagoYape(total: Double) {

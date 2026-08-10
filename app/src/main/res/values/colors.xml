@@ -14,4 +14,24 @@
     <color name="green_dark">#2E7D32</color>
     <color name="green_light">#E8F5E9</color>
     <color name="green_stroke">#388E3C</color>
+
+    <!-- Colores fijos de la app (no cambian) -->
+    <color name="verde_nav">#4CAF50</color>
+    <color name="amarillo_accion">#FFC107</color>
+    <color name="morado_scanner">#7B2D8B</color>
+
+    <!-- Colores adaptivos — modo claro -->
+    <color name="texto_principal">#1A1A2E</color>
+    <color name="texto_secundario">#64748B</color>
+    <color name="texto_hint">#94A3B8</color>
+    <color name="fondo_general">#F8F9FA</color>
+    <color name="fondo_card">#FFFFFF</color>
+    <color name="borde_card">#E2E8F0</color>
+    <color name="texto_sobre_amarillo">#1A1A2E</color>
+    <color name="texto_sobre_verde">#FFFFFF</color>
+
+    <!-- Alertas y estados -->
+    <color name="rojo_alerta">#EF4444</color>
+    <color name="verde_ganancia">#16A34A</color>
+    <color name="amarillo_texto">#92400E</color>
 </resources>

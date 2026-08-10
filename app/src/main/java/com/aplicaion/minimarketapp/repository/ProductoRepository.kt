@@ -20,11 +20,17 @@ class ProductoRepository(private val productoDao: ProductoDao) {
     suspend fun getById(id: Int): Producto? =
         productoDao.getById(id)
 
+    fun getByIdLiveData(id: Int): androidx.lifecycle.LiveData<Producto> =
+        productoDao.getByIdLiveData(id)
+
     suspend fun insertProducto(producto: Producto): Long =
         productoDao.insert(producto)
 
     suspend fun updateProducto(producto: Producto) =
         productoDao.update(producto)
+
+    suspend fun actualizar(producto: Producto) =
+        productoDao.actualizar(producto)
 
     suspend fun deleteProducto(producto: Producto) =
         productoDao.delete(producto)

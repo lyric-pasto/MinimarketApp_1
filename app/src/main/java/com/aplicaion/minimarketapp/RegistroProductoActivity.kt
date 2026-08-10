@@ -53,6 +53,7 @@ class RegistroProductoActivity : AppCompatActivity() {
     private var selectedCategoriaId: Int = 0
     private var categoriasList: List<Categoria> = emptyList()
     private var imagenUriPath: String? = null
+    private var productoEditando: com.aplicaion.minimarketapp.db.entity.Producto? = null
 
     private val productoViewModel: ProductoViewModel by viewModels {
         val db = AppDatabase.getInstance(this)
@@ -87,6 +88,44 @@ class RegistroProductoActivity : AppCompatActivity() {
         initViews()
         setupListeners()
         observeViewModel()
+
+        val productoId = intent.getLongExtra("PRODUCTO_ID", intent.getIntExtra("PRODUCTO_ID", -1).toLong())
+        if (productoId != -1L) {
+            toolbar.title = "Editar Producto"
+            btnGuardar.text = "Actualizar"
+            cargarProductoParaEditar(productoId)
+        } else {
+            toolbar.title = "Nuevo Producto"
+        }
+    }
+
+    private fun cargarProductoParaEditar(id: Long) {
+        productoViewModel.getById(id).observe(this) { producto ->
+            if (producto == null) return@observe
+            productoEditando = producto
+            selectedCategoriaId = producto.categoriaId
+
+            etNombreProducto.setText(producto.nombre)
+            etStockActual.setText(producto.stock.toString())
+            etProveedor.setText(producto.proveedorId?.toString() ?: "")
+            etPrecioCompra.setText(producto.precioCompra.toString())
+            etPrecioVenta.setText(producto.precioVenta.toString())
+            etCodigoBarras.setText(producto.codigoBarras)
+            etDescripcion.setText(producto.descripcion ?: "")
+
+            if (!producto.imagenPath.isNull_or_blank_safe()) {
+                imagenUriPath = producto.imagenPath
+                mostrarImagen(producto.imagenPath!!)
+            }
+
+            productoViewModel.categorias.observe(this) { cats ->
+                val catObj = cats.find { it.id == producto.categoriaId }
+                if (catObj != null) {
+                    spinnerCategoria.setText(catObj.nombre, false)
+                }
+            }
+            calcularGanancia()
+        }
     }
 
     private fun initViews() {
@@ -209,9 +248,9 @@ class RegistroProductoActivity : AppCompatActivity() {
         val ganancia = venta - compra
         tvGanancia.text = "S/ %.2f".format(ganancia)
         if (ganancia >= 0) {
-            tvGanancia.setTextColor(android.graphics.Color.parseColor("#2E7D32"))
+            tvGanancia.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.verde_ganancia))
         } else {
-            tvGanancia.setTextColor(android.graphics.Color.parseColor("#C62828"))
+            tvGanancia.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.rojo_alerta))
         }
     }
 
@@ -246,17 +285,32 @@ class RegistroProductoActivity : AppCompatActivity() {
             }
         }
 
-        productoViewModel.guardarProducto(
-            nombre = nombre,
-            stockStr = stock,
-            categoriaId = selectedCategoriaId,
-            proveedorNombre = proveedor,
-            precioCompraStr = compra,
-            precioVentaStr = venta,
-            codigoBarras = codigo,
-            descripcion = descripcion,
-            imagenPath = imagenUriPath
-        )
+        if (productoEditando != null) {
+            val prodActualizado = productoEditando!!.copy(
+                nombre = nombre,
+                stock = stock.toIntOrNull() ?: productoEditando!!.stock,
+                categoriaId = if (selectedCategoriaId > 0) selectedCategoriaId else productoEditando!!.categoriaId,
+                proveedorId = proveedor.toIntOrNull() ?: productoEditando!!.proveedorId,
+                precioCompra = compra.toDoubleOrNull() ?: productoEditando!!.precioCompra,
+                precioVenta = precioVentaVal,
+                codigoBarras = codigo,
+                descripcion = descripcion,
+                imagenPath = imagenUriPath ?: productoEditando!!.imagenPath
+            )
+            productoViewModel.actualizarProducto(prodActualizado)
+        } else {
+            productoViewModel.guardarProducto(
+                nombre = nombre,
+                stockStr = stock,
+                categoriaId = selectedCategoriaId,
+                proveedorNombre = proveedor,
+                precioCompraStr = compra,
+                precioVentaStr = venta,
+                codigoBarras = codigo,
+                descripcion = descripcion,
+                imagenPath = imagenUriPath
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

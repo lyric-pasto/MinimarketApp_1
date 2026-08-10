@@ -6,14 +6,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="#FFFFFF">
+    android:background="@color/fondo_card">
 
     <!-- Indicador superior del bottom sheet -->
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
-        android:background="#CBD5E1"
+        android:background="@color/borde_card"
         android:layout_marginBottom="16dp"/>
 
     <!-- Título -->
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirmar Pago"
-        android:textColor="#1A1A2E"
+        android:textColor="@color/texto_principal"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Tipo de Cliente"
-            android:textColor="#1A1A2E"
+            android:textColor="@color/texto_principal"
             android:textSize="15sp"
             android:textStyle="bold"/>
 
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Total a pagar"
-            android:textColor="#1A1A2E"
+            android:textColor="@color/texto_principal"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="S/ 0.00"
-            android:textColor="#4CAF50"
+            android:textColor="@color/verde_ganancia"
             android:textSize="24sp"
             android:textStyle="bold"/>
 
@@ -95,8 +95,8 @@
             android:text="💵 EFECTIVO"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
+            app:backgroundTint="@color/verde_nav"
+            android:textColor="@color/texto_sobre_verde"
             app:cornerRadius="12dp"/>
 
         <com.google.android.material.button.MaterialButton
@@ -108,8 +108,8 @@
             android:text="YAPE"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:backgroundTint="#7B2D8B"
-            android:textColor="#FFFFFF"
+            app:backgroundTint="@color/morado_scanner"
+            android:textColor="@color/texto_sobre_verde"
             app:cornerRadius="12dp"/>
 
     </LinearLayout>
