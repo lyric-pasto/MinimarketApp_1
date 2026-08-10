@@ -112,20 +112,27 @@ class ScannerActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalGetImage::class)
     private fun processImageProxy(imageProxy: ImageProxy) {
+        if (isFinishing || isDestroyed) {
+            imageProxy.close()
+            return
+        }
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             barcodeScanner.process(image)
                 .addOnSuccessListener { barcodes ->
+                    if (isFinishing || isDestroyed) return@addOnSuccessListener
                     for (barcode in barcodes) {
                         val rawValue = barcode.rawValue ?: barcode.displayValue
                         if (!rawValue.isNull_or_blank_safe()) {
                             codigoEscaneado = rawValue
                             runOnUiThread {
-                                binding.resultTextView.text = rawValue
-                                binding.btnGuardar.isEnabled = true
-                                binding.codeTypeChip.visibility = View.VISIBLE
-                                binding.codeTypeChip.text = "Código Detectado"
+                                if (!isFinishing && !isDestroyed) {
+                                    binding.resultTextView.text = rawValue
+                                    binding.btnGuardar.isEnabled = true
+                                    binding.codeTypeChip.visibility = View.VISIBLE
+                                    binding.codeTypeChip.text = "Código Detectado"
+                                }
                             }
                             break
                         }
@@ -143,12 +150,23 @@ class ScannerActivity : AppCompatActivity() {
         return this == null || this.trim().isEmpty()
     }
 
+    override fun onPause() {
+        super.onPause()
+        try {
+            cameraProvider?.unbindAll()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         try {
             cameraProvider?.unbindAll()
             barcodeScanner.close()
-            cameraExecutor.shutdown()
+            if (!cameraExecutor.isShutdown) {
+                cameraExecutor.shutdown()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
