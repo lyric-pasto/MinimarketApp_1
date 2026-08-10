@@ -1,0 +1,108 @@
+package com.aplicaion.minimarketapp.viewmodel
+
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.aplicaion.minimarketapp.db.entity.Usuario
+import com.aplicaion.minimarketapp.repository.AuthRepository
+import com.aplicaion.minimarketapp.utils.Constants
+import com.aplicaion.minimarketapp.utils.Resource
+import kotlinx.coroutines.launch
+
+class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+
+    private val _loginState = MutableLiveData<Resource<Usuario>?>()
+    val loginState: LiveData<Resource<Usuario>?> = _loginState
+
+    private val _registroState = MutableLiveData<Resource<String>?>()
+    val registroState: LiveData<Resource<String>?> = _registroState
+
+    fun login(usuario: String, contrasena: String) {
+        Log.d("LOGIN", "Intentando login con: $usuario / $contrasena")
+        if (usuario.isBlank() || contrasena.isBlank()) {
+            _loginState.value = Resource.Error("Por favor, ingrese usuario y contraseña")
+            return
+        }
+
+        _loginState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                val user = authRepository.login(usuario.trim(), contrasena.trim())
+                Log.d("LOGIN", "Resultado: $user")
+                if (user != null) {
+                    _loginState.value = Resource.Success(user)
+                } else {
+                    _loginState.value = Resource.Error("Usuario o contraseña incorrectos")
+                }
+            } catch (e: Exception) {
+                Log.e("LOGIN", "Error en login", e)
+                _loginState.value = Resource.Error("Error al iniciar sesión: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun registrarUsuario(
+        nombreCompleto: String,
+        usuario: String,
+        contrasena: String,
+        confirmarContrasena: String,
+        correo: String
+    ) {
+        if (nombreCompleto.isBlank() || usuario.isBlank() || contrasena.isBlank() || correo.isBlank()) {
+            _registroState.value = Resource.Error("Todos los campos son obligatorios")
+            return
+        }
+
+        if (contrasena.length < 8) {
+            _registroState.value = Resource.Error("La contraseña debe tener como mínimo 8 caracteres")
+            return
+        }
+
+        if (contrasena != confirmarContrasena) {
+            _registroState.value = Resource.Error("Las contraseñas no coinciden")
+            return
+        }
+
+        _registroState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                if (authRepository.existeUsuario(usuario.trim())) {
+                    _registroState.value = Resource.Error("El nombre de usuario ya está registrado")
+                    return@launch
+                }
+
+                val nuevoUsuario = Usuario(
+                    nombreCompleto = nombreCompleto.trim(),
+                    usuario = usuario.trim(),
+                    correo = correo.trim(),
+                    contrasena = contrasena.trim(),
+                    rol = Constants.ROL_VENDEDOR,
+                    estado = Constants.ESTADO_ACTIVO
+                )
+
+                authRepository.registrarUsuario(nuevoUsuario)
+                _registroState.value = Resource.Success("Usuario registrado exitosamente")
+            } catch (e: Exception) {
+                _registroState.value = Resource.Error("Error al registrar usuario: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun resetStates() {
+        _loginState.value = null
+        _registroState.value = null
+    }
+
+    class Factory(private val authRepository: AuthRepository) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+                return AuthViewModel(authRepository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+}

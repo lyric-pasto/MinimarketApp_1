@@ -1,0 +1,8 @@
+{
+  "name": "MinimarketApp",
+  "description": "Point of sale and inventory management application for a minimarket.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

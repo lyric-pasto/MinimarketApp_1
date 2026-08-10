@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".punto_venta">
+
+    <!-- ── CONTENIDO PRINCIPAL (todo menos el menú inferior) ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="72dp">
+
+        <!-- HEADER: título + flecha atrás -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <ImageButton
+                android:id="@+id/btnVolver"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Volver"
+                android:src="@drawable/icono_regresar_pantalla"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Punto de Venta"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- Ícono de filtro (al costado derecho del título) -->
+            <ImageButton
+                android:id="@+id/btnFiltro"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Filtrar"
+                android:src="@drawable/ic_filter"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+        <!-- BARRA DE BÚSQUEDA + botón escáner de código de barras -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
+
+            <!-- Campo de búsqueda -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchProductos"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_search"
+                app:iconifiedByDefault="false"
+                app:queryHint="Buscar producto..."
+                app:searchIcon="@drawable/ic_search" />
+
+            <!-- Botón de escáner de código de barras -->
+            <ImageButton
+                android:id="@+id/btnEscanear"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_boton_redondo"
+                android:src="@drawable/ic_barcode_scanner"
+                android:contentDescription="Escanear código de barras"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+
+                <!-- Chip: Todos -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTodos"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:checkable="true"
+                    android:checked="true"
+                    android:text="Todos"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- Chip: Abarrotes -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAbarrotes"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:checkable="true"
+                    android:text="Abarrotes"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- Chip: Lácteos y Refrigerados -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLacteos"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:checkable="true"
+                    android:text="Lácteos"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- Chip: Bebidas y Licores -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipBebidas"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:checkable="true"
+                    android:text="Bebidas"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- Chip: Limpieza del Hogar -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLimpieza"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:checkable="true"
+                    android:text="Limpieza"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <!-- Chip: Snacks y Golosinas -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSnacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Snacks"
+                    android:checkable="true"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- LISTA DE PRODUCTOS (RecyclerView) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerProductos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/activity_item_producto_venta" />
+
+    </LinearLayout>
+
+    <!-- ── MENÚ INFERIOR (barra de navegación verde) ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#5AC84C"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Tab: Carrito -->
+        <LinearLayout
+            android:id="@+id/tabCarrito"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/Carrito"
+                android:contentDescription="Carrito"
+                android:src="@drawable/ic_carrito" />
+
+        </LinearLayout>
+
+        <!-- Tab: Inventario -->
+        <LinearLayout
+            android:id="@+id/tabInventario"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/Inventario"
+                android:src="@drawable/ic_inventario"
+                android:contentDescription="Inventario" />
+
+        </LinearLayout>
+
+        <!-- Tab: Historial -->
+        <LinearLayout
+            android:id="@+id/tabHistorial"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/Historial"
+                android:src="@drawable/ic_historial"
+                android:contentDescription="Historial" />
+
+        </LinearLayout>
+
+        <!-- Tab: Proveedores -->
+        <LinearLayout
+            android:id="@+id/tabProveedores"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/proveedor"
+                android:src="@drawable/ic_proveedores"
+                android:contentDescription="Proveedores" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

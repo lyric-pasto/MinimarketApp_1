@@ -1,0 +1,247 @@
+package com.aplicaion.minimarketapp
+
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import com.aplicaion.minimarketapp.db.AppDatabase
+import com.aplicaion.minimarketapp.db.entity.Categoria
+import com.aplicaion.minimarketapp.repository.CategoriaRepository
+import com.aplicaion.minimarketapp.repository.ProductoRepository
+import com.aplicaion.minimarketapp.utils.Constants
+import com.aplicaion.minimarketapp.utils.Resource
+import com.aplicaion.minimarketapp.utils.formatSoles
+import com.aplicaion.minimarketapp.viewmodel.ProductoViewModel
+import com.bumptech.glide.Glide
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+
+class RegistroProductoActivity : AppCompatActivity() {
+
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var ivProducto: ImageView
+    private lateinit var layoutPlaceholder: LinearLayout
+    private lateinit var btnTomarFoto: MaterialButton
+    private lateinit var btnGaleria: MaterialButton
+    private lateinit var etNombreProducto: TextInputEditText
+    private lateinit var etStockActual: TextInputEditText
+    private lateinit var spinnerCategoria: AutoCompleteTextView
+    private lateinit var etProveedor: TextInputEditText
+    private lateinit var etPrecioCompra: TextInputEditText
+    private lateinit var etPrecioVenta: TextInputEditText
+    private lateinit var tvGanancia: TextView
+    private lateinit var etCodigoBarras: TextInputEditText
+    private lateinit var btnScanner: MaterialButton
+    private lateinit var etDescripcion: TextInputEditText
+    private lateinit var btnGuardar: MaterialButton
+    private lateinit var bottomNavigation: BottomNavigationView
+
+    private var selectedCategoriaId: Int = 0
+    private var categoriasList: List<Categoria> = emptyList()
+    private var imagenUriPath: String? = null
+
+    private val productoViewModel: ProductoViewModel by viewModels {
+        val db = AppDatabase.getInstance(this)
+        val prodRepo = ProductoRepository(db.productoDao())
+        val catRepo = CategoriaRepository(db.categoriaDao())
+        ProductoViewModel.Factory(prodRepo, catRepo)
+    }
+
+    private val scannerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val codigo = result.data?.getStringExtra(Constants.CODIGO_SCANEADO)
+                if (!codigo.isNull_or_blank_safe()) {
+                    etCodigoBarras.setText(codigo)
+                    Toast.makeText(this, "Código capturado: $codigo", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    private val galleryLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                imagenUriPath = it.toString()
+                mostrarImagen(it.toString())
+            }
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_registro_producto)
+
+        initViews()
+        setupListeners()
+        observeViewModel()
+    }
+
+    private fun initViews() {
+        toolbar = findViewById(R.id.toolbar)
+        ivProducto = findViewById(R.id.ivProducto)
+        layoutPlaceholder = findViewById(R.id.layoutPlaceholder)
+        btnTomarFoto = findViewById(R.id.btnTomarFoto)
+        btnGaleria = findViewById(R.id.btnGaleria)
+        etNombreProducto = findViewById(R.id.etNombreProducto)
+        etStockActual = findViewById(R.id.etStockActual)
+        spinnerCategoria = findViewById(R.id.spinnerCategoria)
+        etProveedor = findViewById(R.id.etProveedor)
+        etPrecioCompra = findViewById(R.id.etPrecioCompra)
+        etPrecioVenta = findViewById(R.id.etPrecioVenta)
+        tvGanancia = findViewById(R.id.tvGanancia)
+        etCodigoBarras = findViewById(R.id.etCodigoBarras)
+        btnScanner = findViewById(R.id.btnScanner)
+        etDescripcion = findViewById(R.id.etDescripcion)
+        btnGuardar = findViewById(R.id.btnGuardar)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
+
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupListeners() {
+        btnScanner.setOnClickListener {
+            val intent = Intent(this, ScannerActivity::class.java)
+            scannerLauncher.launch(intent)
+        }
+
+        btnTomarFoto.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+
+        btnGaleria.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+
+        val priceTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                calcularGanancia()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        etPrecioCompra.addTextChangedListener(priceTextWatcher)
+        etPrecioVenta.addTextChangedListener(priceTextWatcher)
+
+        btnGuardar.setOnClickListener {
+            guardarProducto()
+        }
+
+        bottomNavigation.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_pos -> {
+                    val intent = Intent(this, punto_venta::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_carrito -> {
+                    val intent = Intent(this, CarritoActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_inventario -> true
+                else -> false
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        productoViewModel.categorias.observe(this) { list ->
+            categoriasList = list
+            val nombres = list.map { it.nombre }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nombres)
+            spinnerCategoria.setAdapter(adapter)
+
+            spinnerCategoria.setOnItemClickListener { _, _, position, _ ->
+                if (position in list.indices) {
+                    selectedCategoriaId = list[position].id
+                }
+            }
+
+            if (list.isNotEmpty() && selectedCategoriaId == 0) {
+                spinnerCategoria.setText(list[0].nombre, false)
+                selectedCategoriaId = list[0].id
+            }
+        }
+
+        productoViewModel.guardarState.observe(this) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    btnGuardar.isEnabled = false
+                }
+                is Resource.Success -> {
+                    btnGuardar.isEnabled = true
+                    Toast.makeText(this, resource.data ?: "Producto guardado", Toast.LENGTH_SHORT).show()
+                    productoViewModel.resetGuardarState()
+                    finish()
+                }
+                is Resource.Error -> {
+                    btnGuardar.isEnabled = true
+                    Toast.makeText(this, resource.message ?: "Error al guardar", Toast.LENGTH_LONG).show()
+                }
+                null -> {
+                    btnGuardar.isEnabled = true
+                }
+            }
+        }
+    }
+
+    private fun calcularGanancia() {
+        val compra = etPrecioCompra.text?.toString()?.toDoubleOrNull() ?: 0.0
+        val venta = etPrecioVenta.text?.toString()?.toDoubleOrNull() ?: 0.0
+        val ganancia = productoViewModel.calcularGanancia(compra, venta)
+        tvGanancia.text = ganancia.formatSoles()
+    }
+
+    private fun guardarProducto() {
+        val nombre = etNombreProducto.text?.toString().orEmpty()
+        val stock = etStockActual.text?.toString().orEmpty()
+        val proveedor = etProveedor.text?.toString().orEmpty()
+        val compra = etPrecioCompra.text?.toString().orEmpty()
+        val venta = etPrecioVenta.text?.toString().orEmpty()
+        val codigo = etCodigoBarras.text?.toString().orEmpty()
+        val descripcion = etDescripcion.text?.toString().orEmpty()
+
+        productoViewModel.guardarProducto(
+            nombre = nombre,
+            stockStr = stock,
+            categoriaId = selectedCategoriaId,
+            proveedorNombre = proveedor,
+            precioCompraStr = compra,
+            precioVentaStr = venta,
+            codigoBarras = codigo,
+            descripcion = descripcion,
+            imagenPath = imagenUriPath
+        )
+    }
+
+    private fun mostrarImagen(path: String) {
+        ivProducto.visibility = View.VISIBLE
+        layoutPlaceholder.visibility = View.GONE
+        Glide.with(this)
+            .load(path)
+            .centerCrop()
+            .into(ivProducto)
+    }
+
+    private fun String?.isNull_or_blank_safe(): Boolean {
+        return this == null || this.trim().isEmpty()
+    }
+}
