@@ -8,7 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.aplicaion.minimarketapp.db.entity.Producto
 import com.aplicaion.minimarketapp.db.entity.Venta
-import com.aplicaion.minimarketapp.repository.ItemCarrito
+import com.aplicaion.minimarketapp.viewmodel.ItemCarrito
 import com.aplicaion.minimarketapp.repository.VentaRepository
 import com.aplicaion.minimarketapp.utils.Resource
 import kotlinx.coroutines.launch

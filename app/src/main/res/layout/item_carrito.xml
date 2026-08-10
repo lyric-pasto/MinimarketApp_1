@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +16,17 @@
         android:gravity="center_vertical"
         android:padding="12dp">
 
+        <!-- Imagen del Producto (Glide) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivProducto"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
+
+        <!-- Nombre y Precio unitario -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,7 +40,9 @@
                 android:text="Nombre Producto"
                 android:textColor="#1A1A2E"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/tvPrecio"
@@ -43,15 +57,15 @@
                 android:id="@+id/tvSubtotalLinea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subtotal: S/ 0.00"
+                android:text="S/ 0.00"
                 android:textColor="#4CAF50"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="2dp"/>
 
         </LinearLayout>
 
-        <!-- Controles + / - -->
+        <!-- Controles - / + en fila horizontal -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +77,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:padding="0dp"
-                android:text="-"
+                android:text="−"
                 android:textSize="16sp"
                 app:backgroundTint="#E2E8F0"
                 android:textColor="#1A1A2E"
@@ -72,7 +86,7 @@
 
             <TextView
                 android:id="@+id/tvCantidad"
-                android:layout_width="32dp"
+                android:layout_width="28dp"
                 android:layout_height="wrap_content"
                 android:text="1"
                 android:gravity="center"
@@ -96,10 +110,11 @@
                 android:id="@+id/btnEliminar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_delete"
-                app:tint="#EF4444"/>
+                app:tint="#EF4444"
+                android:contentDescription="Eliminar"/>
 
         </LinearLayout>
 

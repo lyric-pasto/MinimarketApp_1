@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.aplicaion.minimarketapp.repository.ItemCarrito
 import com.aplicaion.minimarketapp.utils.formatSoles
+import com.aplicaion.minimarketapp.viewmodel.ItemCarrito
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 
 class CarritoAdapter(
@@ -17,6 +19,7 @@ class CarritoAdapter(
 ) : RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder>() {
 
     class CarritoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val ivProducto: ImageView = view.findViewById(R.id.ivProducto)
         val tvNombre: TextView = view.findViewById(R.id.tvNombre)
         val tvPrecio: TextView = view.findViewById(R.id.tvPrecio)
         val tvSubtotalLinea: TextView = view.findViewById(R.id.tvSubtotalLinea)
@@ -38,6 +41,16 @@ class CarritoAdapter(
         holder.tvPrecio.text = "${item.producto.precioVenta.formatSoles()} c/u"
         holder.tvSubtotalLinea.text = "Subtotal: ${item.subtotalLinea.formatSoles()}"
         holder.tvCantidad.text = item.cantidad.toString()
+
+        if (!item.producto.imagenPath.isNullOrEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(item.producto.imagenPath)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .error(android.R.drawable.ic_menu_gallery)
+                .into(holder.ivProducto)
+        } else {
+            holder.ivProducto.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
 
         holder.btnRestar.setOnClickListener {
             onModificarCantidad(item.producto.id, -1)

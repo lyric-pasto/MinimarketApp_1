@@ -206,18 +206,45 @@ class RegistroProductoActivity : AppCompatActivity() {
     private fun calcularGanancia() {
         val compra = etPrecioCompra.text?.toString()?.toDoubleOrNull() ?: 0.0
         val venta = etPrecioVenta.text?.toString()?.toDoubleOrNull() ?: 0.0
-        val ganancia = productoViewModel.calcularGanancia(compra, venta)
-        tvGanancia.text = ganancia.formatSoles()
+        val ganancia = venta - compra
+        tvGanancia.text = "S/ %.2f".format(ganancia)
+        if (ganancia >= 0) {
+            tvGanancia.setTextColor(android.graphics.Color.parseColor("#2E7D32"))
+        } else {
+            tvGanancia.setTextColor(android.graphics.Color.parseColor("#C62828"))
+        }
     }
 
     private fun guardarProducto() {
-        val nombre = etNombreProducto.text?.toString().orEmpty()
-        val stock = etStockActual.text?.toString().orEmpty()
-        val proveedor = etProveedor.text?.toString().orEmpty()
-        val compra = etPrecioCompra.text?.toString().orEmpty()
-        val venta = etPrecioVenta.text?.toString().orEmpty()
-        val codigo = etCodigoBarras.text?.toString().orEmpty()
-        val descripcion = etDescripcion.text?.toString().orEmpty()
+        val nombre = etNombreProducto.text?.toString()?.trim().orEmpty()
+        val stock = etStockActual.text?.toString()?.trim().orEmpty()
+        val categoriaText = spinnerCategoria.text?.toString()?.trim().orEmpty()
+        val proveedor = etProveedor.text?.toString()?.trim().orEmpty()
+        val compra = etPrecioCompra.text?.toString()?.trim().orEmpty()
+        val venta = etPrecioVenta.text?.toString()?.trim().orEmpty()
+        val codigo = etCodigoBarras.text?.toString()?.trim().orEmpty()
+        val descripcion = etDescripcion.text?.toString()?.trim().orEmpty()
+
+        val precioVentaVal = venta.toDoubleOrNull() ?: 0.0
+
+        when {
+            nombre.isEmpty() -> {
+                etNombreProducto.error = "Requerido"
+                return
+            }
+            categoriaText.isEmpty() -> {
+                Toast.makeText(this, "Seleccioná una categoría", Toast.LENGTH_SHORT).show()
+                return
+            }
+            codigo.isEmpty() -> {
+                etCodigoBarras.error = "Requerido"
+                return
+            }
+            precioVentaVal <= 0 -> {
+                etPrecioVenta.error = "Debe ser mayor a 0"
+                return
+            }
+        }
 
         productoViewModel.guardarProducto(
             nombre = nombre,
@@ -230,6 +257,18 @@ class RegistroProductoActivity : AppCompatActivity() {
             descripcion = descripcion,
             imagenPath = imagenUriPath
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            val codigo = data?.getStringExtra(Constants.CODIGO_SCANEADO)
+                ?: data?.getStringExtra("CODIGO_SCANEADO")
+            if (!codigo.isNull_or_blank_safe()) {
+                etCodigoBarras.setText(codigo)
+                Toast.makeText(this, "Código capturado: $codigo", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun mostrarImagen(path: String) {

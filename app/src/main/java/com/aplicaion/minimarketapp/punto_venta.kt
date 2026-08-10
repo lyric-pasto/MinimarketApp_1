@@ -3,27 +3,30 @@ package com.aplicaion.minimarketapp
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aplicaion.minimarketapp.db.AppDatabase
 import com.aplicaion.minimarketapp.db.entity.Producto
 import com.aplicaion.minimarketapp.repository.CategoriaRepository
-import com.aplicaion.minimarketapp.db.dao.DetalleVentaDao
-import com.aplicaion.minimarketapp.repository.ItemCarrito
 import com.aplicaion.minimarketapp.repository.ProductoRepository
 import com.aplicaion.minimarketapp.repository.VentaRepository
 import com.aplicaion.minimarketapp.utils.Constants
 import com.aplicaion.minimarketapp.utils.Resource
+import com.aplicaion.minimarketapp.viewmodel.CarritoViewModel
 import com.aplicaion.minimarketapp.viewmodel.ProductoViewModel
 import com.aplicaion.minimarketapp.viewmodel.VentaViewModel
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.launch
 
 class punto_venta : AppCompatActivity() {
 
@@ -40,12 +43,15 @@ class punto_venta : AppCompatActivity() {
     private lateinit var chipSnacks: Chip
 
     private lateinit var tabCarrito: LinearLayout
+    private lateinit var tvBadgeCarrito: TextView
     private lateinit var tabInventario: LinearLayout
     private lateinit var tabHistorial: LinearLayout
     private lateinit var tabProveedores: LinearLayout
 
     private lateinit var productAdapter: ProductAdapter
     private var allProductsList: List<Producto> = emptyList()
+
+    private val carritoViewModel = CarritoViewModel.getInstance()
 
     private val productoViewModel: ProductoViewModel by viewModels {
         val db = AppDatabase.getInstance(this)
@@ -94,6 +100,7 @@ class punto_venta : AppCompatActivity() {
         chipSnacks = findViewById(R.id.chipSnacks)
 
         tabCarrito = findViewById(R.id.tabCarrito)
+        tvBadgeCarrito = findViewById(R.id.tvBadgeCarrito)
         tabInventario = findViewById(R.id.tabInventario)
         tabHistorial = findViewById(R.id.tabHistorial)
         tabProveedores = findViewById(R.id.tabProveedores)
@@ -101,7 +108,7 @@ class punto_venta : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter(emptyList()) { producto ->
-            ventaViewModel.agregarAlCarrito(producto)
+            carritoViewModel.agregar(producto)
             Toast.makeText(this, "Añadido al carrito: ${producto.nombre}", Toast.LENGTH_SHORT).show()
         }
         recyclerProductos.layoutManager = LinearLayoutManager(this)
@@ -130,7 +137,6 @@ class punto_venta : AppCompatActivity() {
             }
         })
 
-        // Chips listener
         val chipClickListener = {
             filtrarProductos()
         }
@@ -142,7 +148,6 @@ class punto_venta : AppCompatActivity() {
         chipLimpieza.setOnClickListener { chipClickListener() }
         chipSnacks.setOnClickListener { chipClickListener() }
 
-        // Bottom nav actions
         tabCarrito.setOnClickListener {
             mostrarCarritoDialog()
         }
@@ -169,17 +174,14 @@ class punto_venta : AppCompatActivity() {
             filtrarProductos()
         }
 
-        ventaViewModel.ventaResult.observe(this) { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    Toast.makeText(this, resource.data ?: "Venta realizada", Toast.LENGTH_SHORT).show()
-                    ventaViewModel.resetVentaResult()
+        lifecycleScope.launch {
+            carritoViewModel.totalItems.collect { total ->
+                if (total > 0) {
+                    tvBadgeCarrito.visibility = View.VISIBLE
+                    tvBadgeCarrito.text = total.toString()
+                } else {
+                    tvBadgeCarrito.visibility = View.GONE
                 }
-                is Resource.Error -> {
-                    Toast.makeText(this, resource.message ?: "Error en venta", Toast.LENGTH_LONG).show()
-                    ventaViewModel.resetVentaResult()
-                }
-                else -> {}
             }
         }
     }

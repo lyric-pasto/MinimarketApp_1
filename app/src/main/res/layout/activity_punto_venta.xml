@@ -104,7 +104,7 @@
                 <!-- Chip: Todos -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipTodos"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:checkable="true"
@@ -115,7 +115,7 @@
                 <!-- Chip: Abarrotes -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAbarrotes"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:checkable="true"
@@ -125,7 +125,7 @@
                 <!-- Chip: Lácteos y Refrigerados -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLacteos"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:checkable="true"
@@ -135,7 +135,7 @@
                 <!-- Chip: Bebidas y Licores -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipBebidas"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:checkable="true"
@@ -145,7 +145,7 @@
                 <!-- Chip: Limpieza del Hogar -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLimpieza"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:checkable="true"
@@ -155,11 +155,11 @@
                 <!-- Chip: Snacks y Golosinas -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSnacks"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:text="Snacks"
-                    android:checkable="true"
-                    style="@style/Widget.Material3.Chip.Filter" />
+                    android:checkable="true" />
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -196,12 +196,31 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/Carrito"
-                android:contentDescription="Carrito"
-                android:src="@drawable/ic_carrito" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/Carrito"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="Carrito"
+                    android:src="@drawable/ic_carrito" />
+
+                <TextView
+                    android:id="@+id/tvBadgeCarrito"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/bg_chip_selected"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
         </LinearLayout>
 

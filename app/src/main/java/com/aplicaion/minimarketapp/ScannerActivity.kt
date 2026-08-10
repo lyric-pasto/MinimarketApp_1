@@ -30,6 +30,8 @@ class ScannerActivity : AppCompatActivity() {
     private lateinit var barcodeScanner: BarcodeScanner
     private var codigoEscaneado: String? = null
 
+    private var cameraProvider: ProcessCameraProvider? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerBinding.inflate(layoutInflater)
@@ -81,7 +83,8 @@ class ScannerActivity : AppCompatActivity() {
 
         cameraProviderFuture.addListener({
             try {
-                val cameraProvider = cameraProviderFuture.get()
+                val provider = cameraProviderFuture.get()
+                cameraProvider = provider
                 val preview = Preview.Builder()
                     .setResolutionSelector(resolutionSelector)
                     .build()
@@ -99,8 +102,8 @@ class ScannerActivity : AppCompatActivity() {
                     }
 
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
+                provider.unbindAll()
+                provider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -142,6 +145,12 @@ class ScannerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        cameraExecutor.shutdown()
+        try {
+            cameraProvider?.unbindAll()
+            barcodeScanner.close()
+            cameraExecutor.shutdown()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

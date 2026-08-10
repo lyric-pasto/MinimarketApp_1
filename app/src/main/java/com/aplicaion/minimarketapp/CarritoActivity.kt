@@ -3,18 +3,15 @@ package com.aplicaion.minimarketapp
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aplicaion.minimarketapp.db.AppDatabase
-import com.aplicaion.minimarketapp.repository.VentaRepository
-import com.aplicaion.minimarketapp.utils.Constants
-import com.aplicaion.minimarketapp.utils.Resource
 import com.aplicaion.minimarketapp.utils.formatSoles
-import com.aplicaion.minimarketapp.viewmodel.VentaViewModel
+import com.aplicaion.minimarketapp.viewmodel.CarritoViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 class CarritoActivity : AppCompatActivity() {
 
@@ -23,18 +20,10 @@ class CarritoActivity : AppCompatActivity() {
     private lateinit var tvSubtotal: TextView
     private lateinit var tvIgv: TextView
     private lateinit var tvTotal: TextView
-    private lateinit var btnEfectivo: MaterialButton
-    private lateinit var btnYape: MaterialButton
-    private lateinit var btnConfirmarVenta: MaterialButton
+    private lateinit var btnContinuar: MaterialButton
 
     private lateinit var adapter: CarritoAdapter
-    private var metodoPagoSeleccionado: String = Constants.PAGO_EFECTIVO
-
-    private val ventaViewModel: VentaViewModel by viewModels {
-        val db = AppDatabase.getInstance(this)
-        val ventaRepo = VentaRepository(db.ventaDao(), db.detalleVentaDao(), db.productoDao())
-        VentaViewModel.Factory(ventaRepo)
-    }
+    private val carritoViewModel = CarritoViewModel.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +41,7 @@ class CarritoActivity : AppCompatActivity() {
         tvSubtotal = findViewById(R.id.tvSubtotal)
         tvIgv = findViewById(R.id.tvIgv)
         tvTotal = findViewById(R.id.tvTotal)
-        btnEfectivo = findViewById(R.id.btnEfectivo)
-        btnYape = findViewById(R.id.btnYape)
-        btnConfirmarVenta = findViewById(R.id.btnConfirmarVenta)
+        btnContinuar = findViewById(R.id.btnContinuar)
 
         toolbar.setNavigationOnClickListener {
             finish()
@@ -64,11 +51,18 @@ class CarritoActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = CarritoAdapter(
             items = emptyList(),
-            onModificarCantidad = { id, delta ->
-                ventaViewModel.modificarCantidad(id, delta)
+            onModificarCantidad = { productoId, delta ->
+                val prod = carritoViewModel.items.value.find { it.producto.id == productoId }?.producto
+                if (prod != null) {
+                    if (delta > 0) {
+                        carritoViewModel.agregar(prod)
+                    } else {
+                        carritoViewModel.reducir(prod)
+                    }
+                }
             },
-            onEliminar = { id ->
-                ventaViewModel.eliminarDelCarrito(id)
+            onEliminar = { productoId ->
+                carritoViewModel.eliminarPorId(productoId)
             }
         )
         rvCarrito.layoutManager = LinearLayoutManager(this)
@@ -76,61 +70,30 @@ class CarritoActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        btnEfectivo.setOnClickListener {
-            metodoPagoSeleccionado = Constants.PAGO_EFECTIVO
-            btnEfectivo.alpha = 1.0f
-            btnYape.alpha = 0.5f
-            Toast.makeText(this, "Método de pago: Efectivo", Toast.LENGTH_SHORT).show()
-        }
-
-        btnYape.setOnClickListener {
-            metodoPagoSeleccionado = Constants.PAGO_YAPE
-            btnEfectivo.alpha = 0.5f
-            btnYape.alpha = 1.0f
-            Toast.makeText(this, "Método de pago: Yape", Toast.LENGTH_SHORT).show()
-        }
-
-        btnConfirmarVenta.setOnClickListener {
-            ventaViewModel.procesarVenta(metodoPagoSeleccionado)
+        btnContinuar.setOnClickListener {
+            val items = carritoViewModel.items.value
+            if (items.isEmpty()) {
+                Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val dialogPago = DialogPagoFragment()
+            dialogPago.show(supportFragmentManager, "DialogPagoFragment")
         }
     }
 
     private fun observeViewModel() {
-        ventaViewModel.carrito.observe(this) { items ->
-            adapter.updateItems(items)
-        }
+        lifecycleScope.launch {
+            carritoViewModel.items.collect { items ->
+                adapter.updateItems(items)
+                val sub = items.sumOf { it.producto.precioVenta * it.cantidad }
+                val igv = sub * 0.18
+                val tot = sub + igv
 
-        ventaViewModel.subtotal.observe(this) { sub ->
-            tvSubtotal.text = sub.formatSoles()
-        }
+                tvSubtotal.text = sub.formatSoles()
+                tvIgv.text = igv.formatSoles()
+                tvTotal.text = tot.formatSoles()
 
-        ventaViewModel.igv.observe(this) { igv ->
-            tvIgv.text = igv.formatSoles()
-        }
-
-        ventaViewModel.total.observe(this) { tot ->
-            tvTotal.text = tot.formatSoles()
-        }
-
-        ventaViewModel.ventaResult.observe(this) { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    btnConfirmarVenta.isEnabled = false
-                }
-                is Resource.Success -> {
-                    btnConfirmarVenta.isEnabled = true
-                    Toast.makeText(this, resource.data ?: "Venta realizada exitosamente", Toast.LENGTH_LONG).show()
-                    ventaViewModel.resetVentaResult()
-                    finish()
-                }
-                is Resource.Error -> {
-                    btnConfirmarVenta.isEnabled = true
-                    Toast.makeText(this, resource.message ?: "Error al realizar venta", Toast.LENGTH_LONG).show()
-                    ventaViewModel.resetVentaResult()
-                }
-                null -> {
-                    btnConfirmarVenta.isEnabled = true
-                }
+                btnContinuar.isEnabled = items.isNotEmpty()
             }
         }
     }

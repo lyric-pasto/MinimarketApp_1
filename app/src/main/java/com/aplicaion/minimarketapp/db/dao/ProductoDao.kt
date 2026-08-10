@@ -32,8 +32,8 @@ interface ProductoDao {
     @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): Producto?
 
-    @Query("UPDATE productos SET stock = stock + :cantidadDelta WHERE id = :productoId")
-    suspend fun updateStock(productoId: Int, cantidadDelta: Int)
+    @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")
+    suspend fun updateStock(productoId: Int, nuevoStock: Int)
 
     @Query("SELECT * FROM productos WHERE nombre LIKE '%' || :query || '%' OR codigoBarras LIKE '%' || :query || '%' ORDER BY nombre ASC")
     fun searchProductos(query: String): Flow<List<Producto>>
