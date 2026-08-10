@@ -20,6 +20,15 @@
     <color name="amarillo_accion">#FFC107</color>
     <color name="morado_scanner">#7B2D8B</color>
 
+    <!-- Colores de metodos de pago y badges -->
+    <color name="color_yape">#7C3AED</color>
+    <color name="color_plin">#0284C7</color>
+    <color name="color_efectivo">#10B981</color>
+    <color name="color_tarjeta">#3B82F6</color>
+    <color name="bg_card_purple">#F3E8FF</color>
+    <color name="bg_card_green">#ECFDF5</color>
+    <color name="bg_card_amber">#FEF3C7</color>
+
     <!-- Colores adaptivos — modo claro -->
     <color name="texto_principal">#1A1A2E</color>
     <color name="texto_secundario">#64748B</color>

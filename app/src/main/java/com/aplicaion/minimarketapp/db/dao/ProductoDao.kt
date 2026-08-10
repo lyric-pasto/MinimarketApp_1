@@ -36,6 +36,12 @@ interface ProductoDao {
     suspend fun getById(id: Int): Producto?
 
     @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
+    suspend fun getByIdSync(id: Int): Producto?
+
+    @Query("SELECT * FROM productos WHERE codigoBarras = :codigo LIMIT 1")
+    suspend fun getByCodigoBarras(codigo: String): Producto?
+
+    @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
     fun getByIdLiveData(id: Int): androidx.lifecycle.LiveData<Producto>
 
     @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")

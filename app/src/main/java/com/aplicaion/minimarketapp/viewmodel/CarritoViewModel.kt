@@ -30,15 +30,20 @@ class CarritoViewModel : ViewModel() {
         list.sumOf { it.producto.precioVenta * it.cantidad }
     }.stateIn(viewModelScope, SharingStarted.Lazily, 0.0)
 
-    fun agregar(producto: Producto) {
+    fun agregar(producto: Producto): Boolean {
+        if (producto.stock <= 0) return false
         val lista = _sharedItems.value.toMutableList()
         val existente = lista.find { it.producto.id == producto.id }
         if (existente != null) {
+            if (existente.cantidad >= producto.stock) {
+                return false
+            }
             existente.cantidad++
         } else {
             lista.add(ItemCarrito(producto, 1))
         }
         _sharedItems.value = lista
+        return true
     }
 
     fun reducir(producto: Producto) {

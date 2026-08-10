@@ -7,6 +7,8 @@
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
+    app:strokeColor="@color/borde_card"
+    app:strokeWidth="1dp"
     app:cardBackgroundColor="@color/fondo_card">
 
     <LinearLayout
@@ -15,23 +17,35 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvNombreProveedor"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre del Proveedor"
-            android:textColor="@color/texto_principal"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvRuc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RUC: 20100123456"
-            android:textColor="@color/texto_secundario"
-            android:textSize="13sp"
-            android:layout_marginTop="2dp"/>
+            <TextView
+                android:id="@+id/tvNombreProveedor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nombre del Proveedor"
+                android:textColor="@color/texto_principal"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvRuc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RUC: 20100123456"
+                android:textColor="@color/morado_scanner"
+                android:background="@color/bg_card_purple"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvContacto"
@@ -40,7 +54,7 @@
             android:text="Cel: 987654321 - Correo: contacto@aje.com"
             android:textColor="@color/texto_secundario"
             android:textSize="12sp"
-            android:layout_marginTop="2dp"/>
+            android:layout_marginTop="6dp"/>
 
     </LinearLayout>
 

@@ -18,6 +18,70 @@
         app:title="Carrito de Compras"
         app:titleTextColor="@color/texto_sobre_verde"/>
 
+    <!-- Banner / Botón de Escáner Rápido -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardEscaneoRapido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="3dp"
+        app:cardBackgroundColor="@color/bg_card_purple"
+        app:strokeColor="@color/morado_scanner"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_menu_camera"
+                app:tint="@color/morado_scanner"
+                android:layout_marginEnd="10dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Escanear Producto"
+                    android:textColor="@color/morado_scanner"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Escaneá el código de barras para añadir rápido"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEscanearCarrito"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="ESCANEAR"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/morado_scanner"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <!-- Lista de Items en Carrito -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCarrito"
@@ -115,12 +179,12 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- Botón CONTINUAR verde -->
+            <!-- Botón COBRAR AHORA verde -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnContinuar"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:text="CONTINUAR"
+                android:text="COBRAR AHORA"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:backgroundTint="@color/verde_nav"
@@ -130,5 +194,16 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="@color/verde_nav"
+        app:itemIconTint="#FFFFFF"
+        app:itemTextColor="#FFFFFF"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>

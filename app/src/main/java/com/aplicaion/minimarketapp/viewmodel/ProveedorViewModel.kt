@@ -54,6 +54,34 @@ class ProveedorViewModel(private val proveedorRepository: ProveedorRepository) :
         }
     }
 
+    fun actualizarProveedor(proveedor: Proveedor) {
+        if (proveedor.nombre.isBlank() || proveedor.ruc.isBlank()) {
+            _guardarState.value = Resource.Error("Nombre y RUC son requeridos")
+            return
+        }
+        _guardarState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                proveedorRepository.updateProveedor(proveedor)
+                _guardarState.value = Resource.Success("Proveedor actualizado exitosamente")
+            } catch (e: Exception) {
+                _guardarState.value = Resource.Error("Error al actualizar proveedor: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun eliminarProveedor(proveedor: Proveedor) {
+        _guardarState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                proveedorRepository.deleteProveedor(proveedor)
+                _guardarState.value = Resource.Success("Proveedor eliminado exitosamente")
+            } catch (e: Exception) {
+                _guardarState.value = Resource.Error("Error al eliminar proveedor: ${e.localizedMessage}")
+            }
+        }
+    }
+
     fun resetState() {
         _guardarState.value = null
     }

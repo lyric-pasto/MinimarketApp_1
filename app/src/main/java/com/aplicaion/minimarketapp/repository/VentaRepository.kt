@@ -27,12 +27,20 @@ class VentaRepository(
             return Result.failure(Exception("El carrito está vacío"))
         }
 
-        val subtotal = items.sumOf { it.producto.precioVenta * it.cantidad }
-        val igv = subtotal * 0.18
-        val total = subtotal + igv
+        val total = items.sumOf { it.producto.precioVenta * it.cantidad }
+        val subtotal = total / 1.18
+        val igv = total - subtotal
         val codigoVenta = "V${System.currentTimeMillis()}"
 
         try {
+            // Verificar stock antes de procesar la venta
+            items.forEach { item ->
+                val currentProd = productoDao.getByIdSync(item.producto.id)
+                if (currentProd != null && currentProd.stock < item.cantidad) {
+                    return Result.failure(Exception("Stock insuficiente para '${item.producto.nombre}' (disponible: ${currentProd.stock})"))
+                }
+            }
+
             val ventaId = ventaDao.insert(
                 Venta(
                     codigoVenta = codigoVenta,
@@ -55,7 +63,9 @@ class VentaRepository(
                     )
                 )
                 // Descontar stock
-                productoDao.updateStock(item.producto.id, item.producto.stock - item.cantidad)
+                val currentProd = productoDao.getByIdSync(item.producto.id)
+                val nuevoStock = ((currentProd?.stock ?: item.producto.stock) - item.cantidad).coerceAtLeast(0)
+                productoDao.updateStock(item.producto.id, nuevoStock)
             }
 
             return Result.success(ventaId)

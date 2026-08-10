@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.aplicaion.minimarketapp.db.entity.Usuario
 import com.aplicaion.minimarketapp.repository.AuthRepository
@@ -19,6 +20,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _registroState = MutableLiveData<Resource<String>?>()
     val registroState: LiveData<Resource<String>?> = _registroState
+
+    val usuarios: LiveData<List<Usuario>> = authRepository.getAllUsuarios().asLiveData()
 
     fun login(usuario: String, contrasena: String) {
         Log.d("LOGIN", "Intentando login con: $usuario / $contrasena")
@@ -87,6 +90,30 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 _registroState.value = Resource.Success("Usuario registrado exitosamente")
             } catch (e: Exception) {
                 _registroState.value = Resource.Error("Error al registrar usuario: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun actualizarUsuario(usuario: Usuario) {
+        _registroState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                authRepository.updateUsuario(usuario)
+                _registroState.value = Resource.Success("Usuario actualizado exitosamente")
+            } catch (e: Exception) {
+                _registroState.value = Resource.Error("Error al actualizar usuario: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun eliminarUsuario(usuario: Usuario) {
+        _registroState.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                authRepository.deleteUsuario(usuario)
+                _registroState.value = Resource.Success("Usuario eliminado exitosamente")
+            } catch (e: Exception) {
+                _registroState.value = Resource.Error("Error al eliminar usuario: ${e.localizedMessage}")
             }
         }
     }

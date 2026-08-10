@@ -32,4 +32,8 @@ class AuthRepository(private val usuarioDao: UsuarioDao) {
     }
 
     fun getAllUsuarios(): Flow<List<Usuario>> = usuarioDao.getAll()
+
+    suspend fun updateUsuario(usuario: Usuario) = usuarioDao.update(usuario)
+
+    suspend fun deleteUsuario(usuario: Usuario) = usuarioDao.delete(usuario)
 }

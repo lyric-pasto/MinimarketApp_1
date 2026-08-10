@@ -108,8 +108,12 @@ class punto_venta : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter(emptyList()) { producto ->
-            carritoViewModel.agregar(producto)
-            Toast.makeText(this, "Añadido al carrito: ${producto.nombre}", Toast.LENGTH_SHORT).show()
+            val exito = carritoViewModel.agregar(producto)
+            if (exito) {
+                Toast.makeText(this, "Añadido al carrito: ${producto.nombre}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Sin stock disponible para ${producto.nombre}", Toast.LENGTH_SHORT).show()
+            }
         }
         recyclerProductos.layoutManager = LinearLayoutManager(this)
         recyclerProductos.adapter = productAdapter

@@ -7,6 +7,8 @@
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
+    app:strokeColor="@color/borde_card"
+    app:strokeWidth="1dp"
     app:cardBackgroundColor="@color/fondo_card">
 
     <LinearLayout
@@ -18,7 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/tvCodigoVenta"
@@ -45,7 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="6dp">
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/tvFecha"
@@ -56,14 +60,18 @@
                 android:textColor="@color/texto_secundario"
                 android:textSize="12sp"/>
 
+            <!-- Badge Método de Pago -->
             <TextView
                 android:id="@+id/tvMetodoPago"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EFECTIVO"
-                android:textColor="@color/morado_scanner"
-                android:textSize="12sp"
-                android:textStyle="bold"/>
+                android:textColor="@color/white"
+                android:background="@color/color_efectivo"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"/>
 
         </LinearLayout>
 

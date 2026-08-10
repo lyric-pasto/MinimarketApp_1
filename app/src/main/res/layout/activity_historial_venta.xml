@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:background="@color/fondo_general">
 
+    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -14,14 +15,359 @@
         android:background="@color/verde_nav"
         app:navigationIcon="@drawable/icono_regresar_pantalla"
         app:navigationIconTint="@color/texto_sobre_verde"
-        app:title="Historial de Ventas"
+        app:title="Historial y Reportes"
         app:titleTextColor="@color/texto_sobre_verde"/>
 
+    <!-- Contenedor de Filtros -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="8dp">
+
+        <!-- Buscador por Nombre/Código -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            app:startIconTint="@color/morado_scanner"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxBackgroundColor="@color/fondo_card"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBuscarVenta"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:paddingVertical="0dp"
+                android:hint="Buscar venta por código..."
+                android:textSize="13sp"
+                android:textColor="@color/texto_principal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Filtros Rápidos de Fecha (Hoy, Semana, Mes, Todo) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginTop="6dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroHoy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Hoy"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    app:backgroundTint="@color/morado_scanner"
+                    android:textColor="@color/white"
+                    app:cornerRadius="16dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroSemana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Esta Semana"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/texto_principal"
+                    app:strokeColor="@color/borde_card"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="16dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroMes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Este Mes"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/texto_principal"
+                    app:strokeColor="@color/borde_card"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="16dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroTodo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Todo"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/texto_principal"
+                    app:strokeColor="@color/borde_card"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="16dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRangoFechas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Rango..."
+                    android:textSize="11sp"
+                    app:icon="@android:drawable/ic_menu_my_calendar"
+                    app:iconSize="14dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/texto_principal"
+                    app:strokeColor="@color/borde_card"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="16dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Filtros de Método de Pago -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pago: "
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/texto_secundario"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="6dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPagoTodos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Todos"
+                    android:textSize="10sp"
+                    android:layout_marginEnd="4dp"
+                    app:backgroundTint="@color/verde_nav"
+                    android:textColor="@color/white"
+                    app:cornerRadius="12dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPagoEfectivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Efectivo"
+                    android:textSize="10sp"
+                    android:layout_marginEnd="4dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/texto_principal"
+                    app:strokeColor="@color/borde_card"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPagoYape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Yape"
+                    android:textSize="10sp"
+                    android:layout_marginEnd="4dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/color_yape"
+                    app:strokeColor="@color/color_yape"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPagoPlin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Plin"
+                    android:textSize="10sp"
+                    android:layout_marginEnd="4dp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/color_plin"
+                    app:strokeColor="@color/color_plin"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPagoTarjeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Tarjeta"
+                    android:textSize="10sp"
+                    app:backgroundTint="@color/fondo_card"
+                    android:textColor="@color/color_tarjeta"
+                    app:strokeColor="@color/color_tarjeta"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+    <!-- Cards KPI del Reporte (Recaudado, Ventas, Promedio) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="6dp">
+
+        <!-- Card Total Recaudado (Verde) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/bg_card_green"
+            app:strokeColor="@color/color_efectivo"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RECAUDADO"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="10sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvTotalReporte"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/ 0.00"
+                    android:textColor="@color/verde_ganancia"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card N° Ventas (Morado) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="2dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/bg_card_purple"
+            app:strokeColor="@color/color_yape"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CANT. VENTAS"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="10sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvCantidadVentas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/color_yape"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card Promedio Venta (Amarillo/Amber) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/bg_card_amber"
+            app:strokeColor="@color/amarillo_texto"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TICKET PROM."
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="10sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvTicketPromedio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/ 0.00"
+                    android:textColor="@color/amarillo_texto"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- Lista de Ventas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistorial"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="12dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="12dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="@color/verde_nav"
+        app:itemIconTint="#FFFFFF"
+        app:itemTextColor="#FFFFFF"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>

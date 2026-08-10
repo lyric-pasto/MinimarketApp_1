@@ -52,9 +52,7 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
         spinnerTipoCliente.adapter = adapter
 
         val items = carritoViewModel.items.value
-        val subtotal = items.sumOf { it.producto.precioVenta * it.cantidad }
-        val igv = subtotal * 0.18
-        val total = subtotal + igv
+        val total = items.sumOf { it.producto.precioVenta * it.cantidad }
 
         tvTotalPagar.text = total.formatSoles()
 

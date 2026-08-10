@@ -50,9 +50,7 @@ class PagoEfectivoFragment : BottomSheetDialogFragment() {
         btnConfirmarEfectivo = view.findViewById(R.id.btnConfirmarEfectivo)
 
         val items = carritoViewModel.items.value
-        val subtotal = items.sumOf { it.producto.precioVenta * it.cantidad }
-        val igv = subtotal * 0.18
-        totalPagar = subtotal + igv
+        totalPagar = items.sumOf { it.producto.precioVenta * it.cantidad }
 
         tvTotalCobrar.text = "Total: ${totalPagar.formatSoles()}"
 

@@ -73,6 +73,22 @@ class RegistroProductoActivity : AppCompatActivity() {
             }
         }
 
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: android.graphics.Bitmap? ->
+            bitmap?.let {
+                try {
+                    val file = java.io.File(cacheDir, "prod_${System.currentTimeMillis()}.jpg")
+                    java.io.FileOutputStream(file).use { out ->
+                        it.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, out)
+                    }
+                    imagenUriPath = file.absolutePath
+                    mostrarImagen(file.absolutePath)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error guardando foto", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     private val galleryLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -159,7 +175,7 @@ class RegistroProductoActivity : AppCompatActivity() {
         }
 
         btnTomarFoto.setOnClickListener {
-            galleryLauncher.launch("image/*")
+            cameraLauncher.launch(null)
         }
 
         btnGaleria.setOnClickListener {
@@ -193,9 +209,22 @@ class RegistroProductoActivity : AppCompatActivity() {
                 R.id.nav_carrito -> {
                     val intent = Intent(this, CarritoActivity::class.java)
                     startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.nav_inventario -> true
+                R.id.nav_historial -> {
+                    val intent = Intent(this, HistorialVentaActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.nav_proveedores -> {
+                    val intent = Intent(this, ProveedorActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
                 else -> false
             }
         }
@@ -265,10 +294,15 @@ class RegistroProductoActivity : AppCompatActivity() {
         val descripcion = etDescripcion.text?.toString()?.trim().orEmpty()
 
         val precioVentaVal = venta.toDoubleOrNull() ?: 0.0
+        val stockVal = stock.toIntOrNull() ?: 0
 
         when {
             nombre.isEmpty() -> {
                 etNombreProducto.error = "Requerido"
+                return
+            }
+            stockVal < 0 -> {
+                etStockActual.error = "El stock no puede ser negativo"
                 return
             }
             categoriaText.isEmpty() -> {
