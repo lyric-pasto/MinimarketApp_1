@@ -23,7 +23,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery"
+            android:src="@drawable/ic_product_placeholder"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
         <!-- Nombre y Precio unitario -->

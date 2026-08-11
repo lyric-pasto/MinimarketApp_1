@@ -148,6 +148,25 @@
                         app:strokeColor="@color/morado_scanner"
                         app:strokeWidth="1.5dp"
                         app:cornerRadius="20dp"
+                        android:layout_marginBottom="6dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                    <!-- Botón URL Web -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCargarUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="URL Web"
+                        android:textSize="12sp"
+                        android:textColor="@color/verde_nav"
+                        app:icon="@android:drawable/ic_menu_share"
+                        app:iconTint="@color/verde_nav"
+                        app:iconSize="16dp"
+                        app:iconPadding="6dp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:strokeColor="@color/verde_nav"
+                        app:strokeWidth="1.5dp"
+                        app:cornerRadius="20dp"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
                 </LinearLayout>

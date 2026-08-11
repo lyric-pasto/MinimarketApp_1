@@ -52,10 +52,12 @@ class ProductAdapter(
         if (!prod.imagenPath.isNull_or_blank_safe()) {
             Glide.with(holder.itemView.context)
                 .load(prod.imagenPath)
-                .placeholder(android.R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.ic_product_placeholder)
+                .error(R.drawable.ic_product_placeholder)
+                .centerCrop()
                 .into(holder.ivProducto)
         } else {
-            holder.ivProducto.setImageResource(android.R.drawable.ic_menu_gallery)
+            holder.ivProducto.setImageResource(R.drawable.ic_product_placeholder)
         }
 
         holder.btnAgregar.setOnClickListener {

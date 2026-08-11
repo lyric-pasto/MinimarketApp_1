@@ -71,13 +71,6 @@ abstract class AppDatabase : RoomDatabase() {
                     populateInitialData(getInstance(context))
                 }
             }
-
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                CoroutineScope(Dispatchers.IO).launch {
-                    populateInitialData(getInstance(context))
-                }
-            }
         }
 
         private suspend fun populateInitialData(db: AppDatabase) {
@@ -134,7 +127,8 @@ abstract class AppDatabase : RoomDatabase() {
                             stock = 25,
                             descripcion = "Gaseosa Coca Cola botella 3L sin retorno",
                             codigoBarras = "7751234567890",
-                            proveedorId = provId.toInt()
+                            proveedorId = provId.toInt(),
+                            imagenPath = "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400"
                         )
                     )
 
@@ -147,7 +141,8 @@ abstract class AppDatabase : RoomDatabase() {
                             stock = 30,
                             descripcion = "Gaseosa Inca Kola botella 1.5L",
                             codigoBarras = "7751234567891",
-                            proveedorId = provId.toInt()
+                            proveedorId = provId.toInt(),
+                            imagenPath = "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400"
                         )
                     )
 
@@ -160,7 +155,8 @@ abstract class AppDatabase : RoomDatabase() {
                             stock = 4, // Stock bajo < 5 para probar alerta roja
                             descripcion = "Arroz de grano largo y seleccionado",
                             codigoBarras = "7751234567892",
-                            proveedorId = provId.toInt()
+                            proveedorId = provId.toInt(),
+                            imagenPath = "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400"
                         )
                     )
 
@@ -173,7 +169,8 @@ abstract class AppDatabase : RoomDatabase() {
                             stock = 50,
                             descripcion = "Leche entera en lata 400g",
                             codigoBarras = "7751234567893",
-                            proveedorId = provId.toInt()
+                            proveedorId = provId.toInt(),
+                            imagenPath = "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400"
                         )
                     )
                 }

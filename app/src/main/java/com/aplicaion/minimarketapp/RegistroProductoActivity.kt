@@ -37,6 +37,7 @@ class RegistroProductoActivity : AppCompatActivity() {
     private lateinit var layoutPlaceholder: LinearLayout
     private lateinit var btnTomarFoto: MaterialButton
     private lateinit var btnGaleria: MaterialButton
+    private lateinit var btnCargarUrl: MaterialButton
     private lateinit var etNombreProducto: TextInputEditText
     private lateinit var etStockActual: TextInputEditText
     private lateinit var spinnerCategoria: AutoCompleteTextView
@@ -92,8 +93,19 @@ class RegistroProductoActivity : AppCompatActivity() {
     private val galleryLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                imagenUriPath = it.toString()
-                mostrarImagen(it.toString())
+                try {
+                    val file = java.io.File(filesDir, "prod_${System.currentTimeMillis()}.jpg")
+                    contentResolver.openInputStream(it)?.use { input ->
+                        java.io.FileOutputStream(file).use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                    imagenUriPath = file.absolutePath
+                    mostrarImagen(file.absolutePath)
+                } catch (e: Exception) {
+                    imagenUriPath = it.toString()
+                    mostrarImagen(it.toString())
+                }
             }
         }
 
@@ -150,6 +162,7 @@ class RegistroProductoActivity : AppCompatActivity() {
         layoutPlaceholder = findViewById(R.id.layoutPlaceholder)
         btnTomarFoto = findViewById(R.id.btnTomarFoto)
         btnGaleria = findViewById(R.id.btnGaleria)
+        btnCargarUrl = findViewById(R.id.btnCargarUrl)
         etNombreProducto = findViewById(R.id.etNombreProducto)
         etStockActual = findViewById(R.id.etStockActual)
         spinnerCategoria = findViewById(R.id.spinnerCategoria)
@@ -180,6 +193,10 @@ class RegistroProductoActivity : AppCompatActivity() {
 
         btnGaleria.setOnClickListener {
             galleryLauncher.launch("image/*")
+        }
+
+        btnCargarUrl.setOnClickListener {
+            mostrarDialogoCargarUrlWeb()
         }
 
         val priceTextWatcher = object : TextWatcher {
@@ -359,11 +376,50 @@ class RegistroProductoActivity : AppCompatActivity() {
         }
     }
 
+    private fun mostrarDialogoCargarUrlWeb() {
+        val input = com.google.android.material.textfield.TextInputEditText(this)
+        input.hint = "https://ejemplo.com/imagen.jpg"
+        input.inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI
+        if (!imagenUriPath.isNull_or_blank_safe() && (imagenUriPath!!.startsWith("http://") || imagenUriPath!!.startsWith("https://"))) {
+            input.setText(imagenUriPath)
+        }
+
+        val container = android.widget.FrameLayout(this)
+        val params = android.widget.FrameLayout.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val marginPx = (16 * resources.displayMetrics.density).toInt()
+        params.setMargins(marginPx, marginPx / 2, marginPx, marginPx / 2)
+        input.layoutParams = params
+        container.addView(input)
+
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle("Cargar Imagen desde la Web")
+            .setMessage("Ingresa la dirección URL de la imagen en Internet:")
+            .setView(container)
+            .setPositiveButton("Cargar") { dialog, _ ->
+                val url = input.text?.toString()?.trim().orEmpty()
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    imagenUriPath = url
+                    mostrarImagen(url)
+                    Toast.makeText(this, "Imagen Web asignada", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Ingresa una URL válida que empiece con http:// o https://", Toast.LENGTH_LONG).show()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
     private fun mostrarImagen(path: String) {
         ivProducto.visibility = View.VISIBLE
         layoutPlaceholder.visibility = View.GONE
         Glide.with(this)
             .load(path)
+            .placeholder(R.drawable.ic_product_placeholder)
+            .error(R.drawable.ic_product_placeholder)
             .centerCrop()
             .into(ivProducto)
     }

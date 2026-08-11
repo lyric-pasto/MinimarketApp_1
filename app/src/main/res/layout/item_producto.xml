@@ -33,8 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:background="@color/fondo_general"
-                android:src="@android:drawable/ic_menu_gallery" />
+                android:src="@drawable/ic_product_placeholder" />
 
         </com.google.android.material.card.MaterialCardView>
 

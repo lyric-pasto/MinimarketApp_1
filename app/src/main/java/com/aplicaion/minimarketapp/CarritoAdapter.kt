@@ -45,11 +45,12 @@ class CarritoAdapter(
         if (!item.producto.imagenPath.isNullOrEmpty()) {
             Glide.with(holder.itemView.context)
                 .load(item.producto.imagenPath)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.ic_product_placeholder)
+                .error(R.drawable.ic_product_placeholder)
+                .centerCrop()
                 .into(holder.ivProducto)
         } else {
-            holder.ivProducto.setImageResource(android.R.drawable.ic_menu_gallery)
+            holder.ivProducto.setImageResource(R.drawable.ic_product_placeholder)
         }
 
         holder.btnRestar.setOnClickListener {
