@@ -47,8 +47,20 @@ class AuthRepository(private val usuarioDao: UsuarioDao) {
         return usuarioDao.insert(usuario)
     }
 
-    suspend fun existeUsuario(nombreUsuario: String): Boolean {
-        return usuarioDao.getByUsuario(nombreUsuario) != null
+    suspend fun existeUsuario(nombreUsuario: String, excludeId: Int = 0): Boolean {
+        return if (excludeId > 0) {
+            usuarioDao.getByUsuarioExcludingId(nombreUsuario.trim(), excludeId) != null
+        } else {
+            usuarioDao.getByUsuario(nombreUsuario.trim()) != null
+        }
+    }
+
+    suspend fun existeCorreo(correo: String, excludeId: Int = 0): Boolean {
+        return if (excludeId > 0) {
+            usuarioDao.getByCorreoExcludingId(correo.trim(), excludeId) != null
+        } else {
+            usuarioDao.getByCorreo(correo.trim()) != null
+        }
     }
 
     fun getAllUsuarios(): Flow<List<Usuario>> = usuarioDao.getAll()

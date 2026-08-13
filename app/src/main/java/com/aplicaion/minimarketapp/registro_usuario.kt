@@ -20,6 +20,7 @@ class registro_usuario : AppCompatActivity() {
     private lateinit var etNombreCompleto: TextInputEditText
     private lateinit var etUsuario: TextInputEditText
     private lateinit var etContrasena: TextInputEditText
+    private lateinit var etConfirmarContrasena: TextInputEditText
     private lateinit var etCorreo: TextInputEditText
     private lateinit var btnAcceder: MaterialButton
     private lateinit var btnRegresar: ImageView
@@ -38,6 +39,7 @@ class registro_usuario : AppCompatActivity() {
         etNombreCompleto = findViewById(R.id.etNombreCompleto)
         etUsuario = findViewById(R.id.etUsuario)
         etContrasena = findViewById(R.id.etContrasena)
+        etConfirmarContrasena = findViewById(R.id.etConfirmarContrasena)
         etCorreo = findViewById(R.id.etCorreo)
         btnAcceder = findViewById(R.id.btnAcceder)
         btnRegresar = findViewById(R.id.btnRegresar)
@@ -50,13 +52,14 @@ class registro_usuario : AppCompatActivity() {
             val nombre = etNombreCompleto.text?.toString().orEmpty()
             val user = etUsuario.text?.toString().orEmpty()
             val pass = etContrasena.text?.toString().orEmpty()
+            val confirmPass = etConfirmarContrasena.text?.toString().orEmpty()
             val correo = etCorreo.text?.toString().orEmpty()
 
             authViewModel.registrarUsuario(
                 nombreCompleto = nombre,
                 usuario = user,
                 contrasena = pass,
-                confirmarContrasena = pass,
+                confirmarContrasena = confirmPass,
                 correo = correo
             )
         }

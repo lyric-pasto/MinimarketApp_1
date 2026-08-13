@@ -77,6 +77,9 @@ dependencies {
     // Glide
     implementation(libs.glide)
 
+    // ZXing for QR Code generation
+    implementation("com.google.zxing:core:3.5.3")
+
     // ML Kit & Camera
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
     implementation("androidx.camera:camera-core:1.4.1")

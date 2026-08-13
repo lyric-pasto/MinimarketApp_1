@@ -29,11 +29,17 @@ interface UsuarioDao {
     @Query("UPDATE usuarios SET estado = :nuevoEstado WHERE id = :id")
     suspend fun updateEstado(id: Int, nuevoEstado: String)
 
-    @Query("SELECT * FROM usuarios WHERE usuario = :usuario LIMIT 1")
+    @Query("SELECT * FROM usuarios WHERE LOWER(TRIM(usuario)) = LOWER(TRIM(:usuario)) LIMIT 1")
     suspend fun getByUsuario(usuario: String): Usuario?
 
-    @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
+    @Query("SELECT * FROM usuarios WHERE LOWER(TRIM(correo)) = LOWER(TRIM(:correo)) LIMIT 1")
     suspend fun getByCorreo(correo: String): Usuario?
+
+    @Query("SELECT * FROM usuarios WHERE LOWER(TRIM(usuario)) = LOWER(TRIM(:usuario)) AND id != :excludeId LIMIT 1")
+    suspend fun getByUsuarioExcludingId(usuario: String, excludeId: Int): Usuario?
+
+    @Query("SELECT * FROM usuarios WHERE LOWER(TRIM(correo)) = LOWER(TRIM(:correo)) AND id != :excludeId LIMIT 1")
+    suspend fun getByCorreoExcludingId(correo: String, excludeId: Int): Usuario?
 
     @Query("SELECT * FROM usuarios WHERE usuario = :usuario AND correo = :correo LIMIT 1")
     suspend fun getByUsuarioYCorreo(usuario: String, correo: String): Usuario?

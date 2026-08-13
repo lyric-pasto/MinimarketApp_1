@@ -287,6 +287,11 @@ class MinimarketLocalJsonApiImpl(private val context: Context) : MinimarketApi {
                 return@withContext ApiResponse.Error("El nombre de usuario '${usuario.usuario}' ya está registrado")
             }
 
+            val correoExistente = usuarioDao.getByCorreo(usuario.correo.trim())
+            if (correoExistente != null && correoExistente.id != usuario.id) {
+                return@withContext ApiResponse.Error("El correo electrónico '${usuario.correo}' ya está en uso")
+            }
+
             val id = if (usuario.id > 0) {
                 usuarioDao.update(usuario)
                 usuario.id.toLong()

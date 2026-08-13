@@ -427,7 +427,7 @@ object JsonDatabaseManager {
     }
 
     /**
-     * Validador centralizado para Usuarios
+     * Validador centralizado para Usuarios y Credenciales Seguras
      */
     fun validarUsuario(
         nombreCompleto: String,
@@ -436,25 +436,40 @@ object JsonDatabaseManager {
         contrasena: String,
         confirmarContrasena: String? = null
     ): ValidationResult {
-        if (nombreCompleto.trim().isEmpty()) {
-            return ValidationResult(false, "El nombre completo es obligatorio")
+        val nom = nombreCompleto.trim()
+        if (nom.length < 3) {
+            return ValidationResult(false, "El nombre completo debe tener al menos 3 caracteres")
         }
+
         val userTrim = usuario.trim()
-        if (userTrim.length < 3) {
-            return ValidationResult(false, "El nombre de usuario debe tener al menos 3 caracteres")
+        if (userTrim.length < 3 || userTrim.length > 25) {
+            return ValidationResult(false, "El nombre de usuario debe tener entre 3 y 25 caracteres")
         }
         if (userTrim.contains(" ")) {
-            return ValidationResult(false, "El nombre de usuario no debe contener espacios")
+            return ValidationResult(false, "El nombre de usuario no puede contener espacios")
         }
+        val userRegex = Regex("^[a-zA-Z0-9_.]+$")
+        if (!userRegex.matches(userTrim)) {
+            return ValidationResult(false, "El usuario solo puede contener letras, números, puntos o guiones bajos")
+        }
+
         val correoTrim = correo.trim()
         if (correoTrim.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(correoTrim).matches()) {
-            return ValidationResult(false, "Ingrese un correo electrónico válido")
+            return ValidationResult(false, "Ingrese un correo electrónico válido (ejemplo@dominio.com)")
         }
+
+        // Validación de Contraseña Segura
         if (contrasena.length < 6) {
             return ValidationResult(false, "La contraseña debe tener al menos 6 caracteres")
         }
+        val hasLetter = contrasena.any { it.isLetter() }
+        val hasDigit = contrasena.any { it.isDigit() }
+        if (!hasLetter || !hasDigit) {
+            return ValidationResult(false, "Contraseña poco segura: debe combinar al menos una letra y un número")
+        }
+
         if (confirmarContrasena != null && contrasena != confirmarContrasena) {
-            return ValidationResult(false, "Las contraseñas no coinciden")
+            return ValidationResult(false, "Las contraseñas no coinciden. Verifíquelas nuevamente.")
         }
         return ValidationResult(true, "Válido")
     }

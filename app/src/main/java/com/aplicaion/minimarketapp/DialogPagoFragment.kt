@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.aplicaion.minimarketapp.db.AppDatabase
 import com.aplicaion.minimarketapp.repository.VentaRepository
+import com.aplicaion.minimarketapp.utils.QrGeneratorHelper
 import com.aplicaion.minimarketapp.utils.formatSoles
 import com.aplicaion.minimarketapp.viewmodel.CarritoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -73,10 +75,17 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
         val context = requireContext()
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yape, null)
         val tvMontoYape = dialogView.findViewById<TextView>(R.id.tvMontoYape)
+        val imgQr = dialogView.findViewById<ImageView>(R.id.imgQr)
         val btnCerrarYape = dialogView.findViewById<MaterialButton>(R.id.btnCerrarYape)
         val btnCopiarNumeroYape = dialogView.findViewById<MaterialButton>(R.id.btnCopiarNumeroYape)
 
-        tvMontoYape.text = "Monto a pagar: ${total.formatSoles()}"
+        tvMontoYape.text = "Monto exacto a pagar: ${total.formatSoles()}"
+
+        // Generar QR dinámico con el número Yape y monto
+        val qrBitmap = QrGeneratorHelper.generarQrYape(numero = "928193824", monto = total, size = 450)
+        if (qrBitmap != null) {
+            imgQr.setImageBitmap(qrBitmap)
+        }
 
         btnCopiarNumeroYape.setOnClickListener {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

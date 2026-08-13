@@ -2,6 +2,7 @@ package com.aplicaion.minimarketapp
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -16,19 +17,24 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.aplicaion.minimarketapp.db.AppDatabase
 import com.aplicaion.minimarketapp.db.entity.Categoria
+import com.aplicaion.minimarketapp.db.entity.Producto
 import com.aplicaion.minimarketapp.repository.CategoriaRepository
 import com.aplicaion.minimarketapp.repository.ProductoRepository
 import com.aplicaion.minimarketapp.utils.Constants
 import com.aplicaion.minimarketapp.utils.Resource
-import com.aplicaion.minimarketapp.utils.formatSoles
+import com.aplicaion.minimarketapp.utils.SessionManager
 import com.aplicaion.minimarketapp.viewmodel.ProductoViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import java.io.File
+import java.io.FileOutputStream
 
 class RegistroProductoActivity : AppCompatActivity() {
 
@@ -54,7 +60,12 @@ class RegistroProductoActivity : AppCompatActivity() {
     private var selectedCategoriaId: Int = 0
     private var categoriasList: List<Categoria> = emptyList()
     private var imagenUriPath: String? = null
-    private var productoEditando: com.aplicaion.minimarketapp.db.entity.Producto? = null
+    private var productoEditando: Producto? = null
+    private var isEditDataLoaded: Boolean = false
+    private var isSavingInProgress: Boolean = false
+
+    private var tempCameraFile: File? = null
+    private var tempCameraUri: Uri? = null
 
     private val productoViewModel: ProductoViewModel by viewModels {
         val db = AppDatabase.getInstance(this)
@@ -67,57 +78,84 @@ class RegistroProductoActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val codigo = result.data?.getStringExtra(Constants.CODIGO_SCANEADO)
-                if (!codigo.isNull_or_blank_safe()) {
+                    ?: result.data?.getStringExtra("CODIGO_SCANEADO")
+                if (!codigo.isNullOrBlank()) {
                     etCodigoBarras.setText(codigo)
                     Toast.makeText(this, "Código capturado: $codigo", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-    private val cameraLauncher =
-        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: android.graphics.Bitmap? ->
-            bitmap?.let {
-                try {
-                    val file = java.io.File(cacheDir, "prod_${System.currentTimeMillis()}.jpg")
-                    java.io.FileOutputStream(file).use { out ->
-                        it.compress(android.graphics.Bitmap.CompressFormat.JPEG, 90, out)
+    // Launcher de cámara con archivo de almacenamiento persistente
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
+            if (success) {
+                tempCameraFile?.let { file ->
+                    if (file.exists() && file.length() > 0) {
+                        imagenUriPath = file.absolutePath
+                        mostrarImagen(file.absolutePath)
+                        Toast.makeText(this, "✓ Foto capturada y guardada", Toast.LENGTH_SHORT).show()
                     }
-                    imagenUriPath = file.absolutePath
-                    mostrarImagen(file.absolutePath)
-                } catch (e: Exception) {
-                    Toast.makeText(this, "Error guardando foto", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-    private val galleryLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
+    // Fallback de cámara rápida (Thumbnail preview) en caso de que el dispositivo no use TakePicture
+    private val takePreviewLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+            bitmap?.let {
                 try {
-                    val file = java.io.File(filesDir, "prod_${System.currentTimeMillis()}.jpg")
-                    contentResolver.openInputStream(it)?.use { input ->
-                        java.io.FileOutputStream(file).use { output ->
-                            input.copyTo(output)
-                        }
+                    val file = obtenerArchivoDestinoPersistente()
+                    FileOutputStream(file).use { out ->
+                        it.compress(Bitmap.CompressFormat.JPEG, 92, out)
                     }
                     imagenUriPath = file.absolutePath
                     mostrarImagen(file.absolutePath)
+                    Toast.makeText(this, "✓ Foto guardada", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    imagenUriPath = it.toString()
-                    mostrarImagen(it.toString())
+                    Toast.makeText(this, "Error al guardar foto: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    // Launcher de galería con copiado persistente al almacenamiento interno de la app
+    private val galleryLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { sourceUri ->
+                try {
+                    val destFile = obtenerArchivoDestinoPersistente()
+                    contentResolver.openInputStream(sourceUri)?.use { input ->
+                        FileOutputStream(destFile).use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                    if (destFile.exists() && destFile.length() > 0) {
+                        imagenUriPath = destFile.absolutePath
+                        mostrarImagen(destFile.absolutePath)
+                        Toast.makeText(this, "✓ Imagen importada correctamente", Toast.LENGTH_SHORT).show()
+                    } else {
+                        imagenUriPath = sourceUri.toString()
+                        mostrarImagen(sourceUri.toString())
+                    }
+                } catch (e: Exception) {
+                    imagenUriPath = sourceUri.toString()
+                    mostrarImagen(sourceUri.toString())
                 }
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        val sessionManager = com.aplicaion.minimarketapp.utils.SessionManager.getInstance(this)
+
+        val sessionManager = SessionManager.getInstance(this)
         if (!sessionManager.isAdmin) {
             Toast.makeText(this, "Acceso exclusivo para el Administrador", Toast.LENGTH_LONG).show()
             finish()
             return
         }
+
+        // Limpiar estado previo para evitar cierres accidentales al volver de cámara
+        productoViewModel.resetGuardarState()
 
         setContentView(R.layout.activity_registro_producto)
 
@@ -125,19 +163,69 @@ class RegistroProductoActivity : AppCompatActivity() {
         setupListeners()
         observeViewModel()
 
+        if (savedInstanceState != null) {
+            imagenUriPath = savedInstanceState.getString("KEY_IMAGEN_PATH")
+            isEditDataLoaded = savedInstanceState.getBoolean("KEY_EDIT_LOADED", false)
+            val savedTempPath = savedInstanceState.getString("KEY_TEMP_CAMERA_PATH")
+            if (!savedTempPath.isNullOrBlank()) {
+                tempCameraFile = File(savedTempPath)
+            }
+            if (!imagenUriPath.isNullOrBlank()) {
+                mostrarImagen(imagenUriPath!!)
+            }
+        }
+
         val productoId = intent.getLongExtra("PRODUCTO_ID", intent.getIntExtra("PRODUCTO_ID", -1).toLong())
         if (productoId != -1L) {
             toolbar.title = "Editar Producto"
-            btnGuardar.text = "Actualizar"
-            cargarProductoParaEditar(productoId)
+            btnGuardar.text = "Actualizar Producto"
+            if (!isEditDataLoaded) {
+                cargarProductoParaEditar(productoId)
+            }
         } else {
             toolbar.title = "Nuevo Producto"
+            btnGuardar.text = "Guardar Producto"
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("KEY_IMAGEN_PATH", imagenUriPath)
+        outState.putBoolean("KEY_EDIT_LOADED", isEditDataLoaded)
+        tempCameraFile?.let {
+            outState.putString("KEY_TEMP_CAMERA_PATH", it.absolutePath)
+        }
+    }
+
+    private fun obtenerArchivoDestinoPersistente(): File {
+        val dir = File(filesDir, "productos_img")
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+        return File(dir, "prod_${System.currentTimeMillis()}.jpg")
+    }
+
+    private fun iniciarCapturaCamara() {
+        try {
+            val file = obtenerArchivoDestinoPersistente()
+            tempCameraFile = file
+            val uri = FileProvider.getUriForFile(this, "${applicationContext.packageName}.provider", file)
+            tempCameraUri = uri
+            takePictureLauncher.launch(uri)
+        } catch (e: Exception) {
+            // Fallback en caso de que FileProvider falle
+            try {
+                takePreviewLauncher.launch(null)
+            } catch (e2: Exception) {
+                Toast.makeText(this, "No se pudo abrir la cámara: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun cargarProductoParaEditar(id: Long) {
         productoViewModel.getById(id).observe(this) { producto ->
-            if (producto == null) return@observe
+            if (producto == null || isEditDataLoaded) return@observe
+            isEditDataLoaded = true
             productoEditando = producto
             selectedCategoriaId = producto.categoriaId
 
@@ -149,9 +237,9 @@ class RegistroProductoActivity : AppCompatActivity() {
             etCodigoBarras.setText(producto.codigoBarras)
             etDescripcion.setText(producto.descripcion ?: "")
 
-            if (!producto.imagenPath.isNull_or_blank_safe()) {
+            if (imagenUriPath.isNullOrBlank() && !producto.imagenPath.isNullOrBlank()) {
                 imagenUriPath = producto.imagenPath
-                mostrarImagen(producto.imagenPath!!)
+                mostrarImagen(producto.imagenPath)
             }
 
             productoViewModel.categorias.observe(this) { cats ->
@@ -196,7 +284,7 @@ class RegistroProductoActivity : AppCompatActivity() {
         }
 
         btnTomarFoto.setOnClickListener {
-            cameraLauncher.launch(null)
+            iniciarCapturaCamara()
         }
 
         btnGaleria.setOnClickListener {
@@ -292,12 +380,16 @@ class RegistroProductoActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     btnGuardar.isEnabled = true
-                    Toast.makeText(this, resource.data ?: "Producto guardado", Toast.LENGTH_SHORT).show()
-                    productoViewModel.resetGuardarState()
-                    finish()
+                    if (isSavingInProgress) {
+                        isSavingInProgress = false
+                        Toast.makeText(this, resource.data ?: "Producto guardado", Toast.LENGTH_SHORT).show()
+                        productoViewModel.resetGuardarState()
+                        finish()
+                    }
                 }
                 is Resource.Error -> {
                     btnGuardar.isEnabled = true
+                    isSavingInProgress = false
                     Toast.makeText(this, resource.message ?: "Error al guardar", Toast.LENGTH_LONG).show()
                 }
                 null -> {
@@ -342,7 +434,7 @@ class RegistroProductoActivity : AppCompatActivity() {
                 return
             }
             categoriaText.isEmpty() -> {
-                Toast.makeText(this, "Seleccioná una categoría", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Selecciona una categoría", Toast.LENGTH_SHORT).show()
                 return
             }
             codigo.isEmpty() -> {
@@ -354,6 +446,8 @@ class RegistroProductoActivity : AppCompatActivity() {
                 return
             }
         }
+
+        isSavingInProgress = true
 
         if (productoEditando != null) {
             val prodActualizado = productoEditando!!.copy(
@@ -383,23 +477,11 @@ class RegistroProductoActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            val codigo = data?.getStringExtra(Constants.CODIGO_SCANEADO)
-                ?: data?.getStringExtra("CODIGO_SCANEADO")
-            if (!codigo.isNull_or_blank_safe()) {
-                etCodigoBarras.setText(codigo)
-                Toast.makeText(this, "Código capturado: $codigo", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun mostrarDialogoCargarUrlWeb() {
-        val input = com.google.android.material.textfield.TextInputEditText(this)
+        val input = TextInputEditText(this)
         input.hint = "https://ejemplo.com/imagen.jpg"
         input.inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI
-        if (!imagenUriPath.isNull_or_blank_safe() && (imagenUriPath!!.startsWith("http://") || imagenUriPath!!.startsWith("https://"))) {
+        if (!imagenUriPath.isNullOrBlank() && (imagenUriPath!!.startsWith("http://") || imagenUriPath!!.startsWith("https://"))) {
             input.setText(imagenUriPath)
         }
 
@@ -413,7 +495,7 @@ class RegistroProductoActivity : AppCompatActivity() {
         input.layoutParams = params
         container.addView(input)
 
-        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Cargar Imagen desde la Web")
             .setMessage("Ingresa la dirección URL de la imagen en Internet:")
             .setView(container)
@@ -422,7 +504,7 @@ class RegistroProductoActivity : AppCompatActivity() {
                 if (url.startsWith("http://") || url.startsWith("https://")) {
                     imagenUriPath = url
                     mostrarImagen(url)
-                    Toast.makeText(this, "Imagen Web asignada", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "✓ Imagen Web asignada", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Ingresa una URL válida que empiece con http:// o https://", Toast.LENGTH_LONG).show()
                 }
@@ -442,8 +524,5 @@ class RegistroProductoActivity : AppCompatActivity() {
             .centerCrop()
             .into(ivProducto)
     }
-
-    private fun String?.isNull_or_blank_safe(): Boolean {
-        return this == null || this.trim().isEmpty()
-    }
 }
+

@@ -100,6 +100,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="12dp"
             app:passwordToggleEnabled="true"
+            app:helperText="Mínimo 6 caracteres, combine letras y números"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
@@ -108,8 +109,31 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etContrasena"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Contraseña"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña Segura"
+                android:inputType="textPassword"
+                android:paddingStart="48dp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/icono_llave"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:passwordToggleEnabled="true"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmarContrasena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirmar Contraseña"
                 android:inputType="textPassword"
                 android:paddingStart="48dp"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -122,7 +146,7 @@
             android:layout_marginHorizontal="16dp"
             app:startIconDrawable="@drawable/icono_correo"
             app:boxCornerRadiusBottomEnd="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp">
@@ -132,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Correo electrónico por una posible recuperacion"
+                android:hint="Correo Electrónico (Recuperación)"
                 android:paddingStart="48dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>

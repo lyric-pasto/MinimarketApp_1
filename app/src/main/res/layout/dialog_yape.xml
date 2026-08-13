@@ -93,23 +93,24 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Placeholder QR Yape -->
+    <!-- Código QR Yape Dinámico -->
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         app:cardCornerRadius="14dp"
-        app:cardElevation="2dp"
-        app:cardBackgroundColor="@color/morado_scanner"
-        android:layout_marginBottom="10dp">
+        app:cardElevation="3dp"
+        app:strokeColor="@color/morado_scanner"
+        app:strokeWidth="1.5dp"
+        app:cardBackgroundColor="#FFFFFF"
+        android:layout_marginBottom="12dp">
 
         <ImageView
             android:id="@+id/imgQr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
+            android:padding="8dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_barcode_scanner"
-            app:tint="#FFFFFF"/>
+            android:contentDescription="Código QR de Yape"/>
 
     </com.google.android.material.card.MaterialCardView>
 

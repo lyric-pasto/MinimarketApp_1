@@ -76,6 +76,11 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     return@launch
                 }
 
+                if (authRepository.existeCorreo(correo.trim())) {
+                    _registroState.value = Resource.Error("El correo '${correo.trim()}' ya está registrado con otra cuenta")
+                    return@launch
+                }
+
                 val nuevoUsuario = Usuario(
                     nombreCompleto = nombreCompleto.trim(),
                     usuario = usuario.trim(),

@@ -395,8 +395,8 @@ class GestionUsuariosActivity : AppCompatActivity() {
             .setView(layout)
             .setPositiveButton("Guardar") { _, _ ->
                 val pass = etPass.text.toString().trim()
-                if (pass.length < 6) {
-                    Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                if (pass.length < 6 || !pass.any { it.isLetter() } || !pass.any { it.isDigit() }) {
+                    Toast.makeText(this, "Contraseña poco segura: debe tener al menos 6 caracteres y combinar letras y números", Toast.LENGTH_LONG).show()
                     return@setPositiveButton
                 }
                 lifecycleScope.launch {
