@@ -10,6 +10,7 @@ object Constants {
     const val ROL_VENDEDOR = "VENDEDOR"
     const val ESTADO_ACTIVO = "activo"
     const val ESTADO_INACTIVO = "inactivo"
+    const val ESTADO_PENDIENTE = "pendiente"
     const val PAGO_EFECTIVO = "EFECTIVO"
     const val PAGO_YAPE = "YAPE"
 }

@@ -1,0 +1,259 @@
+{
+  "version": 1,
+  "appName": "Minimarket App Database",
+  "generatedAt": "2026-08-13T12:00:00Z",
+  "usuarios": [
+    {
+      "id": 1,
+      "nombreCompleto": "Administrador Principal",
+      "usuario": "admin",
+      "correo": "admin@minimarket.com",
+      "contrasena": "admin123",
+      "rol": "ADMIN",
+      "estado": "activo"
+    },
+    {
+      "id": 2,
+      "nombreCompleto": "Cajero Juan Perez",
+      "usuario": "cajero1",
+      "correo": "juan.cajero@minimarket.com",
+      "contrasena": "cajero123",
+      "rol": "VENDEDOR",
+      "estado": "activo"
+    },
+    {
+      "id": 3,
+      "nombreCompleto": "Supervisora Maria Flores",
+      "usuario": "supervisor",
+      "correo": "maria.supervisor@minimarket.com",
+      "contrasena": "super123",
+      "rol": "ADMIN",
+      "estado": "activo"
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Abarrotes",
+      "descripcion": "Productos básicos y de primera necesidad"
+    },
+    {
+      "id": 2,
+      "nombre": "Lácteos",
+      "descripcion": "Leches, quesos, yogures y derivados lácteos"
+    },
+    {
+      "id": 3,
+      "nombre": "Bebidas",
+      "descripcion": "Gaseosas, aguas minerales, jugos e hidratantes"
+    },
+    {
+      "id": 4,
+      "nombre": "Limpieza",
+      "descripcion": "Artículos de limpieza para el hogar y desinfectantes"
+    },
+    {
+      "id": 5,
+      "nombre": "Snacks",
+      "descripcion": "Papas fritas, galletas, chocolates y golosinas"
+    },
+    {
+      "id": 6,
+      "nombre": "Cuidado Personal",
+      "descripcion": "Jabones, champús, cremas dentales y aseo"
+    }
+  ],
+  "proveedores": [
+    {
+      "id": 1,
+      "nombre": "Distribuidora AJE Group",
+      "ruc": "20100123456",
+      "celular": "987654321",
+      "direccion": "Av. Los Sauces 450, Lima",
+      "correo": "ventas@ajegroup.com",
+      "estado": "activo"
+    },
+    {
+      "id": 2,
+      "nombre": "Alicorp S.A.A.",
+      "ruc": "20100055237",
+      "celular": "976543210",
+      "direccion": "Av. Argentina 4793, Callao",
+      "correo": "pedidos@alicorp.com.pe",
+      "estado": "activo"
+    },
+    {
+      "id": 3,
+      "nombre": "Leche Gloria S.A.",
+      "ruc": "20100190797",
+      "celular": "965432109",
+      "direccion": "Av. República de Panamá 2461, Lima",
+      "correo": "contacto@gloria.com.pe",
+      "estado": "activo"
+    },
+    {
+      "id": 4,
+      "nombre": "Procter & Gamble Perú",
+      "ruc": "20100115011",
+      "celular": "954321098",
+      "direccion": "Av. Canaval y Moreyra 480, San Isidro",
+      "correo": "atencion@pg.com",
+      "estado": "activo"
+    },
+    {
+      "id": 5,
+      "nombre": "Mondelez Perú",
+      "ruc": "20100223190",
+      "celular": "943210987",
+      "direccion": "Calle Las Begonias 320, San Borja",
+      "correo": "ventas@mondelez.com",
+      "estado": "activo"
+    }
+  ],
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Coca Cola 3 Litros",
+      "categoriaId": 3,
+      "precioCompra": 8.50,
+      "precioVenta": 11.50,
+      "stock": 28,
+      "descripcion": "Gaseosa Coca Cola botella no retornable de 3L",
+      "codigoBarras": "7751234567890",
+      "proveedorId": 1,
+      "imagenPath": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400"
+    },
+    {
+      "id": 2,
+      "nombre": "Inca Kola 1.5 Litros",
+      "categoriaId": 3,
+      "precioCompra": 4.20,
+      "precioVenta": 5.80,
+      "stock": 35,
+      "descripcion": "Gaseosa Inca Kola dorada en botella de 1.5L",
+      "codigoBarras": "7751234567891",
+      "proveedorId": 1,
+      "imagenPath": "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400"
+    },
+    {
+      "id": 3,
+      "nombre": "Arroz Extra Costeño 1kg",
+      "categoriaId": 1,
+      "precioCompra": 3.80,
+      "precioVenta": 4.90,
+      "stock": 18,
+      "descripcion": "Arroz superior seleccionado de grano largo 1 kilo",
+      "codigoBarras": "7751234567892",
+      "proveedorId": 2,
+      "imagenPath": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400"
+    },
+    {
+      "id": 4,
+      "nombre": "Leche Evaporada Gloria Azul 400g",
+      "categoriaId": 2,
+      "precioCompra": 3.40,
+      "precioVenta": 4.30,
+      "stock": 42,
+      "descripcion": "Leche entera evaporada en lata con abre fácil 400g",
+      "codigoBarras": "7751234567893",
+      "proveedorId": 3,
+      "imagenPath": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400"
+    },
+    {
+      "id": 5,
+      "nombre": "Aceite Vegetal Primor 1 Litro",
+      "categoriaId": 1,
+      "precioCompra": 7.80,
+      "precioVenta": 9.90,
+      "stock": 15,
+      "descripcion": "Aceite vegetal 100% puro libre de colesterol 1000ml",
+      "codigoBarras": "7751234567894",
+      "proveedorId": 2,
+      "imagenPath": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400"
+    },
+    {
+      "id": 6,
+      "nombre": "Detergente Ariel 1kg",
+      "categoriaId": 4,
+      "precioCompra": 8.00,
+      "precioVenta": 10.50,
+      "stock": 20,
+      "descripcion": "Detergente en polvo multiusos toque de suavizante",
+      "codigoBarras": "7751234567895",
+      "proveedorId": 4,
+      "imagenPath": "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400"
+    },
+    {
+      "id": 7,
+      "nombre": "Galletas Oreo Clásica 6pk",
+      "categoriaId": 5,
+      "precioCompra": 4.50,
+      "precioVenta": 6.20,
+      "stock": 30,
+      "descripcion": "Pack de galletas de chocolate con crema de vainilla",
+      "codigoBarras": "7751234567896",
+      "proveedorId": 5,
+      "imagenPath": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400"
+    },
+    {
+      "id": 8,
+      "nombre": "Yogurt Gloria Fresa 1 Litro",
+      "categoriaId": 2,
+      "precioCompra": 4.90,
+      "precioVenta": 6.50,
+      "stock": 22,
+      "descripcion": "Yogurt batido sabor fresa con probióticos 1kg",
+      "codigoBarras": "7751234567897",
+      "proveedorId": 3,
+      "imagenPath": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400"
+    },
+    {
+      "id": 9,
+      "nombre": "Agua Mineral San Luis 625ml",
+      "categoriaId": 3,
+      "precioCompra": 1.20,
+      "precioVenta": 2.00,
+      "stock": 50,
+      "descripcion": "Agua mineral natural sin gas en botella personal",
+      "codigoBarras": "7751234567898",
+      "proveedorId": 1,
+      "imagenPath": "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=400"
+    },
+    {
+      "id": 10,
+      "nombre": "Shampoo Head & Shoulders 375ml",
+      "categoriaId": 6,
+      "precioCompra": 13.50,
+      "precioVenta": 17.00,
+      "stock": 12,
+      "descripcion": "Shampoo anticaspa limpieza renovadora",
+      "codigoBarras": "7751234567899",
+      "proveedorId": 4,
+      "imagenPath": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=400"
+    },
+    {
+      "id": 11,
+      "nombre": "Papas Lays Clásicas 160g",
+      "categoriaId": 5,
+      "precioCompra": 5.00,
+      "precioVenta": 6.80,
+      "stock": 25,
+      "descripcion": "Papas fritas saladas crujientes bolsa familiar",
+      "codigoBarras": "7751234567801",
+      "proveedorId": 5,
+      "imagenPath": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400"
+    },
+    {
+      "id": 12,
+      "nombre": "Fideos Don Vittorio Spaghetti 1kg",
+      "categoriaId": 1,
+      "precioCompra": 3.90,
+      "precioVenta": 5.20,
+      "stock": 3,
+      "descripcion": "Fideos Spaghetti de trigo durum 1 kilo (Stock Bajo)",
+      "codigoBarras": "7751234567802",
+      "proveedorId": 2,
+      "imagenPath": "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400"
+    }
+  ]
+}

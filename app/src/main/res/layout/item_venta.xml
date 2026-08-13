@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardVenta"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
@@ -60,6 +61,19 @@
                 android:textColor="@color/texto_secundario"
                 android:textSize="12sp"/>
 
+            <TextView
+                android:id="@+id/tvEstadoVenta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COMPLETADA"
+                android:textColor="@color/white"
+                android:background="@color/verde_nav"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:layout_marginEnd="6dp"/>
+
             <!-- Badge Método de Pago -->
             <TextView
                 android:id="@+id/tvMetodoPago"
@@ -68,10 +82,10 @@
                 android:text="EFECTIVO"
                 android:textColor="@color/white"
                 android:background="@color/color_efectivo"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"/>
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"/>
 
         </LinearLayout>
 

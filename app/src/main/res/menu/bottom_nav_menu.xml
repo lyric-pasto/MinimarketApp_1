@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_pos"
-        android:icon="@android:drawable/ic_menu_today"
-        android:title="Inicio" />
+        android:icon="@drawable/ic_pos"
+        android:title="Venta" />
     <item android:id="@+id/nav_carrito"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/ic_carrito"
         android:title="Carrito" />
     <item android:id="@+id/nav_inventario"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@drawable/ic_inventario"
         android:title="Inventario" />
     <item android:id="@+id/nav_historial"
-        android:icon="@android:drawable/ic_menu_recent_history"
+        android:icon="@drawable/ic_historial"
         android:title="Historial" />
     <item android:id="@+id/nav_proveedores"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:icon="@drawable/ic_proveedores"
         android:title="Proveedores" />
 </menu>

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aplicaion.minimarketapp.utils.formatSoles
 import com.aplicaion.minimarketapp.viewmodel.ItemCarrito
@@ -53,6 +54,10 @@ class CarritoAdapter(
             holder.ivProducto.setImageResource(R.drawable.ic_product_placeholder)
         }
 
+        // Deshabilitar botón + si ya alcanzó el stock máximo
+        val alcanzoMaximo = item.cantidad >= item.producto.stock
+        holder.btnSumar.alpha = if (alcanzoMaximo) 0.5f else 1.0f
+
         holder.btnRestar.setOnClickListener {
             onModificarCantidad(item.producto.id, -1)
         }
@@ -69,7 +74,26 @@ class CarritoAdapter(
     override fun getItemCount(): Int = items.size
 
     fun updateItems(newList: List<ItemCarrito>) {
-        items = newList
-        notifyDataSetChanged()
+        val diffCallback = object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = items.size
+            override fun getNewListSize(): Int = newList.size
+
+            override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
+                return items[oldPos].producto.id == newList[newPos].producto.id
+            }
+
+            override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+                val old = items[oldPos]
+                val new = newList[newPos]
+                return old.cantidad == new.cantidad &&
+                        old.producto.precioVenta == new.producto.precioVenta &&
+                        old.producto.stock == new.producto.stock &&
+                        old.producto.nombre == new.producto.nombre
+            }
+        }
+
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        items = ArrayList(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 }

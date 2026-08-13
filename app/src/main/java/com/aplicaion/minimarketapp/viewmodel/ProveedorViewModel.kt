@@ -25,8 +25,14 @@ class ProveedorViewModel(private val proveedorRepository: ProveedorRepository) :
         direccion: String,
         correo: String
     ) {
-        if (nombre.isBlank() || ruc.isBlank()) {
-            _guardarState.value = Resource.Error("Nombre y RUC son requeridos")
+        val validacion = com.aplicaion.minimarketapp.api.JsonDatabaseManager.validarProveedor(
+            nombre = nombre,
+            ruc = ruc,
+            celular = celular,
+            correo = correo
+        )
+        if (!validacion.isValid) {
+            _guardarState.value = Resource.Error(validacion.message)
             return
         }
 
@@ -55,13 +61,25 @@ class ProveedorViewModel(private val proveedorRepository: ProveedorRepository) :
     }
 
     fun actualizarProveedor(proveedor: Proveedor) {
-        if (proveedor.nombre.isBlank() || proveedor.ruc.isBlank()) {
-            _guardarState.value = Resource.Error("Nombre y RUC son requeridos")
+        val validacion = com.aplicaion.minimarketapp.api.JsonDatabaseManager.validarProveedor(
+            nombre = proveedor.nombre,
+            ruc = proveedor.ruc,
+            celular = proveedor.celular,
+            correo = proveedor.correo
+        )
+        if (!validacion.isValid) {
+            _guardarState.value = Resource.Error(validacion.message)
             return
         }
+
         _guardarState.value = Resource.Loading()
         viewModelScope.launch {
             try {
+                val existente = proveedorRepository.getByRuc(proveedor.ruc.trim())
+                if (existente != null && existente.id != proveedor.id) {
+                    _guardarState.value = Resource.Error("El RUC '${proveedor.ruc}' ya pertenece a otro proveedor")
+                    return@launch
+                }
                 proveedorRepository.updateProveedor(proveedor)
                 _guardarState.value = Resource.Success("Proveedor actualizado exitosamente")
             } catch (e: Exception) {

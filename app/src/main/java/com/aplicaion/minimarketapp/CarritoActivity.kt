@@ -11,16 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aplicaion.minimarketapp.db.AppDatabase
+import com.aplicaion.minimarketapp.api.MinimarketApiProvider
 import com.aplicaion.minimarketapp.utils.Constants
+import com.aplicaion.minimarketapp.utils.SessionManager
 import com.aplicaion.minimarketapp.utils.formatSoles
 import com.aplicaion.minimarketapp.viewmodel.CarritoViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CarritoActivity : AppCompatActivity() {
 
@@ -37,6 +36,8 @@ class CarritoActivity : AppCompatActivity() {
 
     private lateinit var adapter: CarritoAdapter
     private val carritoViewModel = CarritoViewModel.getInstance()
+    private val api by lazy { MinimarketApiProvider.getApi(this) }
+    private lateinit var sessionManager: SessionManager
 
     private val scannerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,6 +52,8 @@ class CarritoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_carrito)
+
+        sessionManager = SessionManager.getInstance(this)
 
         initViews()
         setupRecyclerView()
@@ -67,7 +70,7 @@ class CarritoActivity : AppCompatActivity() {
         btnContinuar = findViewById(R.id.btnContinuar)
         bottomNavigation = findViewById(R.id.bottomNavigation)
         btnEscanearCarrito = findViewById(R.id.btnEscanearCarrito)
-        cardEscaneoRapido = findViewById<View>(R.id.cardEscaneoRapido)
+        cardEscaneoRapido = findViewById(R.id.cardEscaneoRapido)
 
         toolbar.inflateMenu(R.menu.menu_carrito)
         toolbar.setNavigationOnClickListener {
@@ -81,16 +84,13 @@ class CarritoActivity : AppCompatActivity() {
         adapter = CarritoAdapter(
             items = emptyList(),
             onModificarCantidad = { productoId, delta ->
-                val prod = carritoViewModel.items.value.find { it.producto.id == productoId }?.producto
-                if (prod != null) {
-                    if (delta > 0) {
-                        val exito = carritoViewModel.agregar(prod)
-                        if (!exito) {
-                            Toast.makeText(this, "Stock máximo alcanzado (${prod.stock})", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        carritoViewModel.reducir(prod)
+                if (delta > 0) {
+                    val exito = carritoViewModel.aumentarPorId(productoId)
+                    if (!exito) {
+                        Toast.makeText(this, "Stock máximo disponible alcanzado", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    carritoViewModel.reducirPorId(productoId)
                 }
             },
             onEliminar = { productoId ->
@@ -112,8 +112,7 @@ class CarritoActivity : AppCompatActivity() {
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             if (menuItem.itemId == R.id.action_scanner) {
-                val intent = Intent(this, ScannerActivity::class.java)
-                scannerLauncher.launch(intent)
+                abrirEscaner()
                 true
             } else {
                 false
@@ -133,28 +132,43 @@ class CarritoActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_pos -> {
-                    val intent = Intent(this, punto_venta::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    val intent = Intent(this, punto_venta::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.nav_carrito -> true
                 R.id.nav_inventario -> {
-                    val intent = Intent(this, RegistroProductoActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    if (sessionManager.isAdmin) {
+                        val intent = Intent(this, RegistroProductoActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Acceso exclusivo para Administrador", Toast.LENGTH_SHORT).show()
+                    }
                     true
                 }
                 R.id.nav_historial -> {
-                    val intent = Intent(this, HistorialVentaActivity::class.java)
+                    val intent = Intent(this, HistorialVentaActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.nav_proveedores -> {
-                    val intent = Intent(this, ProveedorActivity::class.java)
+                    val intent = Intent(this, ProveedorActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
@@ -165,19 +179,19 @@ class CarritoActivity : AppCompatActivity() {
 
     private fun buscarYAgregarProductoPorCodigo(codigo: String) {
         lifecycleScope.launch {
-            val db = AppDatabase.getInstance(this@CarritoActivity)
-            val prod = withContext(Dispatchers.IO) {
-                db.productoDao().getByCodigoBarras(codigo)
-            }
-            if (prod != null) {
-                val exito = carritoViewModel.agregar(prod)
-                if (exito) {
-                    Toast.makeText(this@CarritoActivity, "✓ Escaneado: ${prod.nombre}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@CarritoActivity, "Sin stock disponible para ${prod.nombre}", Toast.LENGTH_SHORT).show()
+            val response = api.getProductoPorCodigo(codigo)
+            if (response.isSuccess) {
+                val prod = response.getOrNull()
+                if (prod != null) {
+                    val exito = carritoViewModel.agregar(prod)
+                    if (exito) {
+                        Toast.makeText(this@CarritoActivity, "✓ Escaneado: ${prod.nombre}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@CarritoActivity, "Sin stock disponible para ${prod.nombre}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } else {
-                Toast.makeText(this@CarritoActivity, "Producto $codigo no encontrado", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@CarritoActivity, "Producto con código $codigo no encontrado", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -186,14 +200,14 @@ class CarritoActivity : AppCompatActivity() {
         lifecycleScope.launch {
             carritoViewModel.items.collect { items ->
                 adapter.updateItems(items)
-                // IGV 18% incluido en el precio final
-                val total = items.sumOf { it.producto.precioVenta * it.cantidad }
-                val subtotal = total / 1.18
-                val igv = total - subtotal
 
-                tvSubtotal.text = subtotal.formatSoles()
-                tvIgv.text = igv.formatSoles()
-                tvTotal.text = total.formatSoles()
+                val totalCalculado = items.sumOf { it.producto.precioVenta * it.cantidad }
+                val subtotalCalculado = totalCalculado / 1.18
+                val igvCalculado = totalCalculado - subtotalCalculado
+
+                tvSubtotal.text = subtotalCalculado.formatSoles()
+                tvIgv.text = igvCalculado.formatSoles()
+                tvTotal.text = totalCalculado.formatSoles()
 
                 btnContinuar.isEnabled = items.isNotEmpty()
             }

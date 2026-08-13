@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.aplicaion.minimarketapp.db.entity.Venta
 import kotlinx.coroutines.flow.Flow
 
@@ -12,8 +13,17 @@ interface VentaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(venta: Venta): Long
 
+    @Update
+    suspend fun update(venta: Venta)
+
+    @Query("UPDATE ventas SET estado = :estado WHERE id = :id")
+    suspend fun updateEstado(id: Int, estado: String)
+
     @Query("SELECT * FROM ventas ORDER BY fecha DESC")
     fun getAll(): Flow<List<Venta>>
+
+    @Query("SELECT * FROM ventas ORDER BY fecha DESC")
+    suspend fun getAllList(): List<Venta>
 
     @Query("SELECT * FROM ventas WHERE fecha >= :inicio AND fecha <= :fin ORDER BY fecha DESC")
     fun getByFecha(inicio: Long, fin: Long): Flow<List<Venta>>

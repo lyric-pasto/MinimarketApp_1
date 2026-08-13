@@ -23,11 +23,29 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios WHERE (usuario = :usuario OR correo = :usuario) AND contrasena = :contrasena AND estado = 'activo' LIMIT 1")
     suspend fun findByUsuarioYContrasena(usuario: String, contrasena: String): Usuario?
 
+    @Query("SELECT * FROM usuarios WHERE (usuario = :usuario OR correo = :usuario) AND contrasena = :contrasena LIMIT 1")
+    suspend fun findByUsuarioYContrasenaAnyStatus(usuario: String, contrasena: String): Usuario?
+
+    @Query("UPDATE usuarios SET estado = :nuevoEstado WHERE id = :id")
+    suspend fun updateEstado(id: Int, nuevoEstado: String)
+
     @Query("SELECT * FROM usuarios WHERE usuario = :usuario LIMIT 1")
     suspend fun getByUsuario(usuario: String): Usuario?
 
+    @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
+    suspend fun getByCorreo(correo: String): Usuario?
+
+    @Query("SELECT * FROM usuarios WHERE usuario = :usuario AND correo = :correo LIMIT 1")
+    suspend fun getByUsuarioYCorreo(usuario: String, correo: String): Usuario?
+
+    @Query("UPDATE usuarios SET contrasena = :nuevaPass WHERE id = :id")
+    suspend fun updateContrasena(id: Int, nuevaPass: String)
+
     @Query("SELECT * FROM usuarios")
     fun getAll(): Flow<List<Usuario>>
+
+    @Query("SELECT * FROM usuarios")
+    suspend fun getAllList(): List<Usuario>
 
     @Query("SELECT COUNT(*) FROM usuarios")
     suspend fun getCount(): Int

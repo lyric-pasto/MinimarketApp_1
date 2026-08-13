@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_general">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- TOOLBAR PRINCIPAL -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/verde_nav"
+            app:navigationIcon="@drawable/icono_regresar_pantalla"
+            app:navigationIconTint="@color/texto_sobre_verde"
+            app:title="Gestión de Usuarios"
+            app:titleTextColor="@color/texto_sobre_verde"
+            app:subtitle="Control de Accesos y Solicitudes"
+            app:subtitleTextColor="@color/texto_sobre_verde"
+            app:menu="@menu/menu_gestion_usuarios"/>
+
+        <!-- BANNER DE NOTIFICACIÓN DE NUEVAS SOLICITUDES -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardNotificacionSolicitudes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/amarillo_accion"
+            app:strokeWidth="1dp"
+            app:strokeColor="#D97706">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_campana"
+                    app:tint="@color/texto_sobre_amarillo"
+                    android:layout_marginEnd="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTituloNotificacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¡Nueva(s) Solicitud(es) de Acceso!"
+                        android:textColor="@color/texto_sobre_amarillo"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSubtituloNotificacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tienes solicitudes pendientes de aprobación."
+                        android:textColor="@color/texto_sobre_amarillo"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVerSolicitudes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Revisar"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/morado_scanner"
+                    app:cornerRadius="8dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingHorizontal="10dp"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BARRA DE BÚSQUEDA RÁPIDA -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:startIconDrawable="@drawable/ic_search"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxBackgroundColor="@color/fondo_card"
+                app:boxStrokeColor="@color/verde_nav"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBuscarUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:paddingVertical="0dp"
+                    android:hint="Buscar por nombre, usuario, correo o rol..."
+                    android:textSize="13sp"
+                    android:textColor="@color/texto_principal"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!-- FILTROS POR PESTAÑAS / CHIPS -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="6dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFiltros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTodos"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Todos"
+                    android:checked="true"
+                    app:chipBackgroundColor="@color/verde_nav"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSolicitudes"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔔 Solicitudes (0)"
+                    android:textColor="@color/texto_principal" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipActivos"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Activos"
+                    android:textColor="@color/texto_principal" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipInactivos"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Inhabilitados"
+                    android:textColor="@color/texto_principal" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAdmins"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Administradores"
+                    android:textColor="@color/texto_principal" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipVendedores"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vendedores"
+                    android:textColor="@color/texto_principal" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <!-- CONTADOR DE REGISTROS -->
+        <TextView
+            android:id="@+id/tvTotalUsuarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostrando 0 usuarios"
+            android:textColor="@color/texto_secundario"
+            android:textSize="12sp"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- ESTADO VACÍO -->
+        <LinearLayout
+            android:id="@+id/layoutEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_usuario"
+                app:tint="@color/texto_hint" />
+
+            <TextView
+                android:id="@+id/tvEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No se encontraron usuarios"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:id="@+id/tvEmptySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No hay usuarios ni solicitudes pendientes para este filtro."
+                android:textColor="@color/texto_secundario"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+        <!-- RECYCLERVIEW DE USUARIOS Y SOLICITUDES -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUsuarios"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+
+    <!-- FAB PARA REGISTRAR DIRECTO -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAgregarUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Registrar Directo"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        app:icon="@drawable/icono_mas"
+        app:iconTint="@color/white"
+        app:backgroundTint="@color/verde_nav"
+        app:elevation="6dp"
+        android:contentDescription="Registrar Usuario Directo" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

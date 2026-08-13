@@ -8,163 +8,204 @@
     android:background="@color/fondo_general"
     tools:context=".punto_venta">
 
-    <!-- ── CONTENIDO PRINCIPAL (todo menos el menú inferior) ── -->
+    <!-- CONTENIDO PRINCIPAL CON ESPACIO PARA LA BARRA INFERIOR -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="72dp">
+        android:layout_marginBottom="60dp">
 
-        <!-- HEADER: título + flecha atrás -->
+        <!-- HEADER: título + badge rol + botones admin/salida -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="14dp"
+            android:background="@color/fondo_card">
 
-            <ImageButton
-                android:id="@+id/btnVolver"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Volver"
-                android:src="@drawable/icono_regresar_pantalla"
-                tools:ignore="TouchTargetSizeCheck" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="Punto de Venta"
-                android:textColor="@color/texto_principal"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
 
-            <!-- Ícono de filtro (al costado derecho del título) -->
+                <TextView
+                    android:id="@+id/tvNombreUsuarioHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Punto de Venta"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRolUsuarioHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VENDEDOR"
+                    android:textColor="@color/verde_ganancia"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Botón Gestión Usuarios con Badge de Notificación (Visible solo para ADMIN) -->
+            <FrameLayout
+                android:id="@+id/layoutBtnGestionUsuarios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp">
+
+                <ImageButton
+                    android:id="@+id/btnGestionUsuarios"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Gestión de Usuarios"
+                    android:src="@drawable/ic_usuario"
+                    app:tint="@color/morado_scanner"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/tvBadgeUsuarios"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/bg_boton_redondo"
+                    android:backgroundTint="@color/rojo_alerta"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <!-- Botón Cerrar Sesión / Salir -->
             <ImageButton
-                android:id="@+id/btnFiltro"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:id="@+id/btnCerrarSesion"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Filtrar"
-                android:src="@drawable/ic_filter"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:contentDescription="Cerrar Sesión"
+                android:src="@drawable/icono_regresar_pantalla"
+                app:tint="@color/rojo_alerta"
+                android:padding="8dp" />
 
         </LinearLayout>
 
-        <!-- BARRA DE BÚSQUEDA + botón escáner de código de barras -->
+        <!-- BARRA DE BÚSQUEDA + BOTÓN ESCÁNER -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="16dp"
-            android:paddingBottom="8dp"
+            android:paddingVertical="8dp"
             android:gravity="center_vertical">
 
-            <!-- Campo de búsqueda -->
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchProductos"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="44dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_search"
                 app:iconifiedByDefault="false"
-                app:queryHint="Buscar producto..."
+                app:queryHint="Buscar por nombre o código..."
                 app:searchIcon="@drawable/ic_search" />
 
-            <!-- Botón de escáner de código de barras -->
             <ImageButton
                 android:id="@+id/btnEscanear"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_boton_redondo"
                 android:src="@drawable/ic_barcode_scanner"
                 android:contentDescription="Escanear código de barras"
-                android:padding="8dp" />
+                android:padding="10dp" />
 
         </LinearLayout>
 
+        <!-- CHIPS DE CATEGORÍAS (Single Selection ChipGroup con scroll horizontal) -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="6dp"
             android:scrollbars="none">
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupCategorias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
+                app:singleLine="true"
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
-                <!-- Chip: Todos -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipTodos"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:checkable="true"
                     android:checked="true"
-                    android:text="Todos"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:text="Todos" />
 
-                <!-- Chip: Abarrotes -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAbarrotes"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:checkable="true"
-                    android:text="Abarrotes"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:text="Abarrotes" />
 
-                <!-- Chip: Lácteos y Refrigerados -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLacteos"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:checkable="true"
-                    android:text="Lácteos"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:text="Lácteos" />
 
-                <!-- Chip: Bebidas y Licores -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipBebidas"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:checkable="true"
-                    android:text="Bebidas"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:text="Bebidas" />
 
-                <!-- Chip: Limpieza del Hogar -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLimpieza"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:checkable="true"
-                    android:text="Limpieza"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:text="Limpieza" />
 
-                <!-- Chip: Snacks y Golosinas -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSnacks"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:text="Snacks"
-                    android:checkable="true" />
+                    android:text="Snacks" />
 
-            </LinearLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCuidadoPersonal"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Cuidado Personal" />
+
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
-        <!-- LISTA DE PRODUCTOS (RecyclerView) -->
+        <!-- CONTADOR DE PRODUCTOS DISPONIBLES -->
+        <TextView
+            android:id="@+id/tvCantidadProductos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="6dp"
+            android:text="Productos disponibles"
+            android:textColor="@color/texto_secundario"
+            android:textSize="12sp" />
+
+        <!-- LISTA DE PRODUCTOS CON SCROLL COMPLETO -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProductos"
             android:layout_width="match_parent"
@@ -172,112 +213,26 @@
             android:layout_weight="1"
             android:clipToPadding="false"
             android:paddingHorizontal="12dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical"
+            android:overScrollMode="always"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/activity_item_producto_venta" />
+            tools:listitem="@layout/item_producto" />
 
     </LinearLayout>
 
-    <!-- ── MENÚ INFERIOR (barra de navegación verde) ── -->
-    <LinearLayout
+    <!-- MENÚ INFERIOR FIJO -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="62dp"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/verde_nav"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <!-- Tab: Carrito -->
-        <LinearLayout
-            android:id="@+id/tabCarrito"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/Carrito"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:contentDescription="Carrito"
-                    android:src="@drawable/ic_carrito" />
-
-                <TextView
-                    android:id="@+id/tvBadgeCarrito"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="top|end"
-                    android:background="@drawable/bg_chip_selected"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-            </FrameLayout>
-
-        </LinearLayout>
-
-        <!-- Tab: Inventario -->
-        <LinearLayout
-            android:id="@+id/tabInventario"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/Inventario"
-                android:src="@drawable/ic_inventario"
-                android:contentDescription="Inventario" />
-
-        </LinearLayout>
-
-        <!-- Tab: Historial -->
-        <LinearLayout
-            android:id="@+id/tabHistorial"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/Historial"
-                android:src="@drawable/ic_historial"
-                android:contentDescription="Historial" />
-
-        </LinearLayout>
-
-        <!-- Tab: Proveedores -->
-        <LinearLayout
-            android:id="@+id/tabProveedores"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/proveedor"
-                android:src="@drawable/ic_proveedores"
-                android:contentDescription="Proveedores" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+        android:background="@color/verde_nav"
+        app:elevation="8dp"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:itemActiveIndicatorStyle="@null"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

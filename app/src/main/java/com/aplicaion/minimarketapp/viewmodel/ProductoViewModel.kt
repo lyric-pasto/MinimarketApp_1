@@ -43,10 +43,34 @@ class ProductoViewModel(
     fun getById(id: Int): LiveData<Producto> = productoRepository.getByIdLiveData(id)
 
     fun actualizarProducto(producto: Producto) {
+        val validacion = com.aplicaion.minimarketapp.api.JsonDatabaseManager.validarProducto(
+            nombre = producto.nombre,
+            codigoBarras = producto.codigoBarras,
+            stock = producto.stock,
+            precioCompra = producto.precioCompra,
+            precioVenta = producto.precioVenta,
+            categoriaId = producto.categoriaId
+        )
+        if (!validacion.isValid) {
+            _guardarState.value = Resource.Error(validacion.message)
+            return
+        }
+
         _guardarState.value = Resource.Loading()
         viewModelScope.launch {
             try {
-                productoRepository.actualizar(producto)
+                val existente = productoRepository.getByCodigo(producto.codigoBarras.trim())
+                if (existente != null && existente.id != producto.id) {
+                    _guardarState.value = Resource.Error("El código de barras ya pertenece a '${existente.nombre}'")
+                    return@launch
+                }
+
+                val prodNormalizado = producto.copy(
+                    stock = producto.stock.coerceAtLeast(0),
+                    precioCompra = producto.precioCompra.coerceAtLeast(0.0),
+                    precioVenta = producto.precioVenta.coerceAtLeast(0.01)
+                )
+                productoRepository.actualizar(prodNormalizado)
                 _guardarState.value = Resource.Success("Producto actualizado correctamente")
             } catch (e: Exception) {
                 _guardarState.value = Resource.Error("Error al actualizar: ${e.message}")

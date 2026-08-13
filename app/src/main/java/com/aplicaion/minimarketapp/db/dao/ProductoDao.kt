@@ -26,6 +26,9 @@ interface ProductoDao {
     @Query("SELECT * FROM productos ORDER BY nombre ASC")
     fun getAll(): Flow<List<Producto>>
 
+    @Query("SELECT * FROM productos ORDER BY nombre ASC")
+    suspend fun getAllList(): List<Producto>
+
     @Query("SELECT * FROM productos WHERE categoriaId = :categoriaId ORDER BY nombre ASC")
     fun getByCategoria(categoriaId: Int): Flow<List<Producto>>
 

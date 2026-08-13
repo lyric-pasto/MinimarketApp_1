@@ -68,7 +68,8 @@ abstract class AppDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 CoroutineScope(Dispatchers.IO).launch {
-                    populateInitialData(getInstance(context))
+                    val appDb = getInstance(context)
+                    com.aplicaion.minimarketapp.api.JsonDatabaseManager.seedDatabaseFromAssets(context, appDb)
                 }
             }
         }

@@ -8,19 +8,39 @@ import kotlinx.coroutines.flow.Flow
 class AuthRepository(private val usuarioDao: UsuarioDao) {
 
     suspend fun login(usuario: String, contrasena: String): Usuario? {
-        // Ensure default admin user exists if database was created
+        // Ensure default users exist if database was created empty
         if (usuarioDao.getCount() == 0) {
-            val admin = Usuario(
-                nombreCompleto = "Administrador Principal",
-                usuario = "admin",
-                correo = "admin@minimarket.com",
-                contrasena = "admin123",
-                rol = Constants.ROL_ADMIN,
-                estado = Constants.ESTADO_ACTIVO
+            usuarioDao.insert(
+                Usuario(
+                    nombreCompleto = "Administrador Principal",
+                    usuario = "admin",
+                    correo = "admin@minimarket.com",
+                    contrasena = "admin123",
+                    rol = Constants.ROL_ADMIN,
+                    estado = Constants.ESTADO_ACTIVO
+                )
             )
-            usuarioDao.insert(admin)
+            usuarioDao.insert(
+                Usuario(
+                    nombreCompleto = "Cajero Juan Perez",
+                    usuario = "cajero1",
+                    correo = "juan.cajero@minimarket.com",
+                    contrasena = "cajero123",
+                    rol = Constants.ROL_VENDEDOR,
+                    estado = Constants.ESTADO_ACTIVO
+                )
+            )
         }
-        return usuarioDao.findByUsuarioYContrasena(usuario, contrasena)
+        val user = usuarioDao.findByUsuarioYContrasenaAnyStatus(usuario, contrasena)
+            ?: return null
+
+        if (user.estado.equals(Constants.ESTADO_INACTIVO, ignoreCase = true)) {
+            throw IllegalStateException("Tu cuenta ha sido inhabilitada. Contacta al Administrador.")
+        }
+        if (user.estado.equals(Constants.ESTADO_PENDIENTE, ignoreCase = true)) {
+            throw IllegalStateException("Tu solicitud de registro está pendiente de aprobación por el Administrador.")
+        }
+        return user
     }
 
     suspend fun registrarUsuario(usuario: Usuario): Long {

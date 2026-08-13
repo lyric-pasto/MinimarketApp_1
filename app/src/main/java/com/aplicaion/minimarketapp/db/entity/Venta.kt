@@ -16,5 +16,6 @@ data class Venta(
     val subtotal: Double,
     val igv: Double,
     val total: Double,
-    val metodoPago: String = "EFECTIVO"
+    val metodoPago: String = "EFECTIVO",
+    val estado: String = "COMPLETADA" // "COMPLETADA", "INHABILITADA", "ANULADA"
 )

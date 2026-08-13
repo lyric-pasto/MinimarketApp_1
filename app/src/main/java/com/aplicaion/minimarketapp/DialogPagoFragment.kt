@@ -1,15 +1,14 @@
 package com.aplicaion.minimarketapp
 
 import android.app.AlertDialog
-import android.graphics.Color
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -75,8 +74,16 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yape, null)
         val tvMontoYape = dialogView.findViewById<TextView>(R.id.tvMontoYape)
         val btnCerrarYape = dialogView.findViewById<MaterialButton>(R.id.btnCerrarYape)
+        val btnCopiarNumeroYape = dialogView.findViewById<MaterialButton>(R.id.btnCopiarNumeroYape)
 
         tvMontoYape.text = "Monto a pagar: ${total.formatSoles()}"
+
+        btnCopiarNumeroYape.setOnClickListener {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Número Yape", "928193824")
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(context, "Número 928193824 copiado al portapapeles", Toast.LENGTH_SHORT).show()
+        }
 
         val alertDialog = AlertDialog.Builder(context)
             .setView(dialogView)
@@ -105,7 +112,7 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
             res.fold(
                 onSuccess = {
                     carritoViewModel.vaciar()
-                    Toast.makeText(ctx, "¡Venta registrada!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(ctx, "¡Venta registrada con éxito!", Toast.LENGTH_SHORT).show()
                     dismiss()
                     activity?.let { act ->
                         if (act !is punto_venta) {

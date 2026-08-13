@@ -28,4 +28,7 @@ interface ProveedorDao {
 
     @Query("SELECT * FROM proveedores WHERE ruc = :ruc LIMIT 1")
     suspend fun getByRuc(ruc: String): Proveedor?
+
+    @Query("SELECT * FROM proveedores WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Int): Proveedor?
 }

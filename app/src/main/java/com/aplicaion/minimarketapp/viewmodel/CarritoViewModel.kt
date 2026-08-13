@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 
 data class ItemCarrito(
     val producto: Producto,
-    var cantidad: Int
+    val cantidad: Int
 ) {
     val subtotalLinea: Double
         get() = producto.precioVenta * cantidad
@@ -24,58 +24,76 @@ class CarritoViewModel : ViewModel() {
 
     val totalItems: StateFlow<Int> = _items.map { list ->
         list.sumOf { it.cantidad }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, 0)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+
+    val total: StateFlow<Double> = _items.map { list ->
+        list.sumOf { it.producto.precioVenta * it.cantidad }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
     val subtotal: StateFlow<Double> = _items.map { list ->
-        list.sumOf { it.producto.precioVenta * it.cantidad }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, 0.0)
+        val tot = list.sumOf { it.producto.precioVenta * it.cantidad }
+        tot / 1.18
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
+
+    val igv: StateFlow<Double> = _items.map { list ->
+        val tot = list.sumOf { it.producto.precioVenta * it.cantidad }
+        tot - (tot / 1.18)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
     fun agregar(producto: Producto): Boolean {
         if (producto.stock <= 0) return false
         val lista = _sharedItems.value.toMutableList()
-        val existente = lista.find { it.producto.id == producto.id }
-        if (existente != null) {
-            if (existente.cantidad >= producto.stock) {
+        val index = lista.indexOfFirst { it.producto.id == producto.id }
+        if (index != -1) {
+            val actual = lista[index]
+            if (actual.cantidad >= producto.stock) {
                 return false
             }
-            existente.cantidad++
+            lista[index] = actual.copy(cantidad = actual.cantidad + 1)
         } else {
             lista.add(ItemCarrito(producto, 1))
         }
-        _sharedItems.value = lista
+        _sharedItems.value = lista.toList()
         return true
     }
 
-    fun reducir(producto: Producto) {
+    fun aumentarPorId(productoId: Int): Boolean {
         val lista = _sharedItems.value.toMutableList()
-        val existente = lista.find { it.producto.id == producto.id }
-        if (existente != null) {
-            if (existente.cantidad > 1) {
-                existente.cantidad--
-            } else {
-                lista.remove(existente)
+        val index = lista.indexOfFirst { it.producto.id == productoId }
+        if (index != -1) {
+            val actual = lista[index]
+            if (actual.cantidad >= actual.producto.stock) {
+                return false
             }
+            lista[index] = actual.copy(cantidad = actual.cantidad + 1)
+            _sharedItems.value = lista.toList()
+            return true
         }
-        _sharedItems.value = lista
+        return false
+    }
+
+    fun reducir(producto: Producto) {
+        reducirPorId(producto.id)
     }
 
     fun reducirPorId(productoId: Int) {
         val lista = _sharedItems.value.toMutableList()
-        val existente = lista.find { it.producto.id == productoId }
-        if (existente != null) {
-            if (existente.cantidad > 1) {
-                existente.cantidad--
+        val index = lista.indexOfFirst { it.producto.id == productoId }
+        if (index != -1) {
+            val actual = lista[index]
+            if (actual.cantidad > 1) {
+                lista[index] = actual.copy(cantidad = actual.cantidad - 1)
             } else {
-                lista.remove(existente)
+                lista.removeAt(index)
             }
+            _sharedItems.value = lista.toList()
         }
-        _sharedItems.value = lista
     }
 
     fun eliminarPorId(productoId: Int) {
         val lista = _sharedItems.value.toMutableList()
         lista.removeAll { it.producto.id == productoId }
-        _sharedItems.value = lista
+        _sharedItems.value = lista.toList()
     }
 
     fun vaciar() {

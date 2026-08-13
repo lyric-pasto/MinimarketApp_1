@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_nuevo_usuario"
+        android:title="Registrar Directo"
+        android:icon="@drawable/icono_mas"
+        app:iconTint="@color/texto_sobre_verde"
+        app:showAsAction="ifRoom" />
+
+</menu>

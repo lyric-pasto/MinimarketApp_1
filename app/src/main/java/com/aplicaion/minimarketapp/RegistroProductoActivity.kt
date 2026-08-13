@@ -111,6 +111,14 @@ class RegistroProductoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        val sessionManager = com.aplicaion.minimarketapp.utils.SessionManager.getInstance(this)
+        if (!sessionManager.isAdmin) {
+            Toast.makeText(this, "Acceso exclusivo para el Administrador", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_registro_producto)
 
         initViews()
@@ -217,28 +225,39 @@ class RegistroProductoActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_pos -> {
-                    val intent = Intent(this, punto_venta::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    val intent = Intent(this, punto_venta::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.nav_carrito -> {
-                    val intent = Intent(this, CarritoActivity::class.java)
+                    val intent = Intent(this, CarritoActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.nav_inventario -> true
                 R.id.nav_historial -> {
-                    val intent = Intent(this, HistorialVentaActivity::class.java)
+                    val intent = Intent(this, HistorialVentaActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }
                 R.id.nav_proveedores -> {
-                    val intent = Intent(this, ProveedorActivity::class.java)
+                    val intent = Intent(this, ProveedorActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
                     startActivity(intent)
+                    overridePendingTransition(0, 0)
                     finish()
                     true
                 }

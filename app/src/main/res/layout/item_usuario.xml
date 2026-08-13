@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/borde_card"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="@color/fondo_card">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- CABECERA: AVATAR INICIALES + DATOS PRINCIPALES + BADGES -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- AVATAR CIRCULAR CON INICIAL -->
+            <TextView
+                android:id="@+id/tvAvatarInicial"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_boton_redondo"
+                android:gravity="center"
+                android:text="A"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvNombreUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Juan Pérez"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario: @cajero1"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp"
+                    android:layout_marginTop="1dp"/>
+
+            </LinearLayout>
+
+            <!-- BADGES DE ROL Y ESTADO -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tvRolUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADMIN"
+                    android:textColor="@color/white"
+                    android:background="@color/morado_scanner"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvEstadoUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACTIVO"
+                    android:textColor="@color/white"
+                    android:background="@color/verde_ganancia"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- CORREO ELECTRÓNICO -->
+        <TextView
+            android:id="@+id/tvCorreoUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✉ juan.cajero@minimarket.com"
+            android:textColor="@color/texto_secundario"
+            android:textSize="12sp"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="4dp"/>
+
+        <!-- SEPARADOR DISCRETO -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/borde_card"
+            android:layout_marginVertical="8dp"/>
+
+        <!-- SECCIÓN DE ACCIONES PARA SOLICITUDES PENDIENTES -->
+        <LinearLayout
+            android:id="@+id/layoutAccionesPendiente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAceptarSolicitud"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:text="✓ Aceptar Registro"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/verde_nav"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_marginEnd="6dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAsignarRolSolicitud"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="Rol"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/morado_scanner"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_marginEnd="6dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRechazarSolicitud"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="Rechazar"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/rojo_alerta"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"/>
+
+        </LinearLayout>
+
+        <!-- SECCIÓN DE ACCIONES PARA USUARIOS ACTIVOS / INACTIVOS -->
+        <LinearLayout
+            android:id="@+id/layoutAccionesNormal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnToggleEstado"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Inhabilitar"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/rojo_alerta"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_marginEnd="6dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCambiarRol"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Cambiar Rol"
+                android:textSize="11sp"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/morado_scanner"
+                app:cornerRadius="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:layout_marginEnd="6dp"/>
+
+            <ImageButton
+                android:id="@+id/btnMasOpciones"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_boton_redondo"
+                android:backgroundTint="@color/fondo_general"
+                android:src="@drawable/icono_llave"
+                app:tint="@color/texto_secundario"
+                android:contentDescription="Más opciones"
+                android:padding="8dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="280dp"
+    android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
@@ -14,31 +14,99 @@
         android:layout_height="56dp"
         android:src="@drawable/ic_yape"
         android:scaleType="fitCenter"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="6dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Escanea el código QR para Yapear"
-        android:textSize="14sp"
-        android:textColor="@color/texto_principal"
+        android:text="Paga rápido con Yape"
+        android:textSize="16sp"
+        android:textColor="@color/morado_scanner"
         android:textStyle="bold"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="4dp"/>
 
-    <!-- Placeholder QR con marco morado #7B2D8B -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escanea el código QR o yapea al número:"
+        android:textSize="12sp"
+        android:textColor="@color/texto_secundario"
+        android:textAlignment="center"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Número Yape destacado -->
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        app:cardCornerRadius="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/morado_scanner"
+        app:strokeWidth="1.5dp"
+        app:cardBackgroundColor="@color/bg_card_purple"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NÚMERO YAPE OFICIAL"
+                android:textSize="10sp"
+                android:textColor="@color/morado_scanner"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvNumeroYape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="928193824"
+                android:textSize="22sp"
+                android:textColor="@color/morado_scanner"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginVertical="2dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Titular: Minimarket Oficial"
+                android:textSize="11sp"
+                android:textColor="@color/texto_secundario"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCopiarNumeroYape"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="📋 Copiar Número"
+                android:textColor="@color/morado_scanner"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Placeholder QR Yape -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:cardCornerRadius="14dp"
         app:cardElevation="2dp"
         app:cardBackgroundColor="@color/morado_scanner"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/imgQr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
+            android:padding="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_barcode_scanner"
             app:tint="#FFFFFF"/>
@@ -50,18 +118,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Monto a pagar: S/ 0.00"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/morado_scanner"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="14dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCerrarYape"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Pago recibido"
+        android:text="✓ Confirmar Pago Recibido"
         android:textColor="@color/texto_sobre_verde"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:backgroundTint="@color/verde_nav"
         app:cornerRadius="10dp"/>

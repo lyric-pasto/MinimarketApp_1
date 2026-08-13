@@ -52,20 +52,19 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         usuario: String,
         contrasena: String,
         confirmarContrasena: String,
-        correo: String
+        correo: String,
+        rol: String = Constants.ROL_VENDEDOR,
+        estado: String = Constants.ESTADO_PENDIENTE
     ) {
-        if (nombreCompleto.isBlank() || usuario.isBlank() || contrasena.isBlank() || correo.isBlank()) {
-            _registroState.value = Resource.Error("Todos los campos son obligatorios")
-            return
-        }
-
-        if (contrasena.length < 8) {
-            _registroState.value = Resource.Error("La contraseña debe tener como mínimo 8 caracteres")
-            return
-        }
-
-        if (contrasena != confirmarContrasena) {
-            _registroState.value = Resource.Error("Las contraseñas no coinciden")
+        val validacion = com.aplicaion.minimarketapp.api.JsonDatabaseManager.validarUsuario(
+            nombreCompleto = nombreCompleto,
+            usuario = usuario,
+            correo = correo,
+            contrasena = contrasena,
+            confirmarContrasena = confirmarContrasena
+        )
+        if (!validacion.isValid) {
+            _registroState.value = Resource.Error(validacion.message)
             return
         }
 
@@ -73,7 +72,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 if (authRepository.existeUsuario(usuario.trim())) {
-                    _registroState.value = Resource.Error("El nombre de usuario ya está registrado")
+                    _registroState.value = Resource.Error("El nombre de usuario '${usuario.trim()}' ya está registrado")
                     return@launch
                 }
 
@@ -82,12 +81,17 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     usuario = usuario.trim(),
                     correo = correo.trim(),
                     contrasena = contrasena.trim(),
-                    rol = Constants.ROL_VENDEDOR,
-                    estado = Constants.ESTADO_ACTIVO
+                    rol = rol,
+                    estado = estado
                 )
 
                 authRepository.registrarUsuario(nuevoUsuario)
-                _registroState.value = Resource.Success("Usuario registrado exitosamente")
+                val msg = if (estado == Constants.ESTADO_PENDIENTE) {
+                    "Solicitud de acceso enviada. El Administrador debe aprobar tu registro."
+                } else {
+                    "Usuario registrado exitosamente"
+                }
+                _registroState.value = Resource.Success(msg)
             } catch (e: Exception) {
                 _registroState.value = Resource.Error("Error al registrar usuario: ${e.localizedMessage}")
             }
