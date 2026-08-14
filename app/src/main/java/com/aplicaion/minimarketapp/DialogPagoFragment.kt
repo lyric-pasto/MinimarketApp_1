@@ -81,8 +81,20 @@ class DialogPagoFragment : BottomSheetDialogFragment() {
 
         tvMontoYape.text = "Monto exacto a pagar: ${total.formatSoles()}"
 
-        // Generar QR dinámico con el número Yape y monto
-        val qrBitmap = QrGeneratorHelper.generarQrYape(numero = "928193824", monto = total, size = 450)
+        // Generar QR dinámico EMVCo oficial con el número Yape y monto exacto
+        val yapeLogoBitmap = try {
+            android.graphics.BitmapFactory.decodeResource(resources, R.drawable.ic_yape)
+        } catch (e: Exception) {
+            null
+        }
+
+        val qrBitmap = QrGeneratorHelper.generarQrYape(
+            numero = "928193824",
+            monto = total,
+            nombreComercio = "MINIMARKET OFICIAL",
+            size = 450,
+            logoCenter = yapeLogoBitmap
+        )
         if (qrBitmap != null) {
             imgQr.setImageBitmap(qrBitmap)
         }
