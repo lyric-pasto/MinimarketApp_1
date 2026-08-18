@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aplicaion.minimarketapp.api.MinimarketApiProvider
 import com.aplicaion.minimarketapp.db.AppDatabase
@@ -126,7 +125,6 @@ class punto_venta : AppCompatActivity() {
 
     private fun setupUserHeader() {
         val userName = sessionManager.userName.ifEmpty { "Minimarket POS" }
-        val rol = sessionManager.userRole
 
         tvNombreUsuarioHeader.text = userName
 
@@ -143,15 +141,31 @@ class punto_venta : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter(emptyList()) { producto ->
-            val exito = carritoViewModel.agregar(producto)
-            if (exito) {
-                Toast.makeText(this, "✓ ${producto.nombre} añadido al carrito", Toast.LENGTH_SHORT).show()
+            val esPorPeso = producto.esPorPeso || producto.tipoVenta == "PESO" || producto.unidadMedida == "KG"
+            if (esPorPeso) {
+                // Diálogo rápido de selección de peso (1/4 kg, 1/2 kg, 3/4 kg, 1 kg)
+                val dialogPeso = DialogSeleccionPeso(producto) { pesoKg, etiqueta ->
+                    val exito = carritoViewModel.agregar(producto, pesoKg, etiqueta)
+                    if (exito) {
+                        Toast.makeText(this, "✓ ${producto.nombre} ($etiqueta) añadido al carrito", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Stock insuficiente para ${producto.nombre}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                dialogPeso.show(supportFragmentManager, "DialogSeleccionPeso")
             } else {
-                Toast.makeText(this, "Stock máximo alcanzado para ${producto.nombre}", Toast.LENGTH_SHORT).show()
+                val exito = carritoViewModel.agregar(producto, 1.0)
+                if (exito) {
+                    Toast.makeText(this, "✓ ${producto.nombre} añadido al carrito", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Stock máximo alcanzado para ${producto.nombre}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        val layoutManager = LinearLayoutManager(this)
-        recyclerProductos.layoutManager = layoutManager
+
+        // Configuración de Cuadrícula de 3 Columnas
+        val gridLayoutManager = GridLayoutManager(this, 3)
+        recyclerProductos.layoutManager = gridLayoutManager
         recyclerProductos.setHasFixedSize(true)
         recyclerProductos.adapter = productAdapter
     }
@@ -213,7 +227,7 @@ class punto_venta : AppCompatActivity() {
                 }
                 R.id.nav_inventario -> {
                     if (sessionManager.isAdmin) {
-                        val intent = Intent(this, RegistroProductoActivity::class.java).apply {
+                        val intent = Intent(this, InventarioMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
                         startActivity(intent)
@@ -221,7 +235,7 @@ class punto_venta : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this,
-                            "Acceso restringido: Solo el Administrador puede gestionar o añadir productos al inventario",
+                            "Acceso restringido: Solo el Administrador puede gestionar el inventario",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -268,7 +282,6 @@ class punto_venta : AppCompatActivity() {
             }
         }
 
-        // Monitorear solicitudes de usuarios pendientes para Administradores
         if (sessionManager.isAdmin) {
             lifecycleScope.launch {
                 val api = MinimarketApiProvider.getApi(this@punto_venta)
@@ -312,12 +325,7 @@ class punto_venta : AppCompatActivity() {
             matchesQuery && matchesCategory
         }
 
-        tvCantidadProductos.text = "${filtered.size} producto(s) encontrado(s)"
+        tvCantidadProductos.text = "${filtered.size} producto(s) en catálogo"
         productAdapter.updateProductos(filtered)
-    }
-
-    private fun mostrarCarritoDialog() {
-        val intent = Intent(this, CarritoActivity::class.java)
-        startActivity(intent)
     }
 }

@@ -157,6 +157,10 @@ object JsonDatabaseManager {
                 prod.optInt("proveedorId")
             } else null
 
+            val esPorPeso = prod.optBoolean("esPorPeso", false)
+            val unidadMedida = prod.optString("unidadMedida", if (esPorPeso) "KG" else "UND")
+            val tipoVenta = prod.optString("tipoVenta", if (esPorPeso) "PESO" else "UNIDAD")
+
             productosList.add(
                 Producto(
                     id = prod.optInt("id", 0),
@@ -168,7 +172,10 @@ object JsonDatabaseManager {
                     descripcion = prod.optString("descripcion", ""),
                     codigoBarras = prod.optString("codigoBarras", ""),
                     proveedorId = provId,
-                    imagenPath = img
+                    imagenPath = img,
+                    esPorPeso = esPorPeso,
+                    unidadMedida = unidadMedida,
+                    tipoVenta = tipoVenta
                 )
             )
         }
@@ -213,8 +220,9 @@ object JsonDatabaseManager {
                 val data = parseJsonDatabase(jsonStr)
 
                 val usuarioDao = db.usuarioDao()
-                if (usuarioDao.getCount() == 0) {
-                    data.usuarios.forEach { user ->
+                data.usuarios.forEach { user ->
+                    val existing = usuarioDao.getByUsuario(user.usuario)
+                    if (existing == null) {
                         usuarioDao.insert(user)
                     }
                 }
@@ -336,6 +344,9 @@ object JsonDatabaseManager {
             o.put("codigoBarras", prod.codigoBarras)
             o.put("proveedorId", prod.proveedorId ?: JSONObject.NULL)
             o.put("imagenPath", prod.imagenPath ?: JSONObject.NULL)
+            o.put("esPorPeso", prod.esPorPeso)
+            o.put("unidadMedida", prod.unidadMedida)
+            o.put("tipoVenta", prod.tipoVenta)
             productosArray.put(o)
         }
         root.put("productos", productosArray)

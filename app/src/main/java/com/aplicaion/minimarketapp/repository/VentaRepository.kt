@@ -36,7 +36,8 @@ class VentaRepository(
             // Verificar stock antes de procesar la venta
             items.forEach { item ->
                 val currentProd = productoDao.getByIdSync(item.producto.id)
-                if (currentProd != null && currentProd.stock < item.cantidad) {
+                val unidadesEnterasRequeridas = Math.ceil(item.cantidad).toInt().coerceAtLeast(1)
+                if (currentProd != null && currentProd.stock < unidadesEnterasRequeridas) {
                     return Result.failure(Exception("Stock insuficiente para '${item.producto.nombre}' (disponible: ${currentProd.stock})"))
                 }
             }
@@ -64,11 +65,43 @@ class VentaRepository(
                 )
                 // Descontar stock
                 val currentProd = productoDao.getByIdSync(item.producto.id)
-                val nuevoStock = ((currentProd?.stock ?: item.producto.stock) - item.cantidad).coerceAtLeast(0)
+                val unidadesADescontar = Math.ceil(item.cantidad).toInt().coerceAtLeast(1)
+                val nuevoStock = ((currentProd?.stock ?: item.producto.stock) - unidadesADescontar).coerceAtLeast(0)
                 productoDao.updateStock(item.producto.id, nuevoStock)
             }
 
             return Result.success(ventaId)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    suspend fun anularOEliminarVenta(ventaId: Int, restaurarStock: Boolean = true): Result<Boolean> {
+        try {
+            val venta = ventaDao.getById(ventaId) ?: return Result.failure(Exception("Venta no encontrada"))
+            if (restaurarStock && venta.estado != "ANULADA" && venta.estado != "INHABILITADA") {
+                val detalles = detalleVentaDao.getByVentaIdList(ventaId)
+                detalles.forEach { d ->
+                    val prod = productoDao.getByIdSync(d.productoId)
+                    if (prod != null) {
+                        val cantARestaurar = Math.ceil(d.cantidad).toInt().coerceAtLeast(1)
+                        productoDao.updateStock(prod.id, prod.stock + cantARestaurar)
+                    }
+                }
+            }
+            detalleVentaDao.deleteByVentaId(ventaId)
+            ventaDao.deleteById(ventaId)
+            return Result.success(true)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    suspend fun vaciarHistorialVentas(): Result<Boolean> {
+        try {
+            detalleVentaDao.deleteAll()
+            ventaDao.deleteAll()
+            return Result.success(true)
         } catch (e: Exception) {
             return Result.failure(e)
         }

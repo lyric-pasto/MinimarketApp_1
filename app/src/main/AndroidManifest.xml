@@ -56,6 +56,22 @@
             android:exported="false" />
 
         <activity
+            android:name=".InventarioMainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CategoriasActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProductosPorCategoriaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".GestionProductosListActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".RegistroProductoActivity"
             android:exported="false" />
 

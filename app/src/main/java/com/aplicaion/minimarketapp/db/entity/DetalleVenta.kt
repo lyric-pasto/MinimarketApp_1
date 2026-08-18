@@ -31,7 +31,7 @@ data class DetalleVenta(
     val id: Int = 0,
     val ventaId: Int,
     val productoId: Int,
-    val cantidad: Int,
+    val cantidad: Double = 1.0,
     val precioUnitario: Double,
     val subtotalLinea: Double
 )

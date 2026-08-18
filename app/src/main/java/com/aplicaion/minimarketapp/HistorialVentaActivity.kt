@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -22,8 +23,7 @@ import androidx.core.util.Pair
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aplicaion.minimarketapp.api.ApiResponse
-import com.aplicaion.minimarketapp.api.MinimarketApiProvider
+import com.aplicaion.minimarketapp.api.JsonDatabaseManager
 import com.aplicaion.minimarketapp.db.AppDatabase
 import com.aplicaion.minimarketapp.db.entity.Venta
 import com.aplicaion.minimarketapp.repository.ReporteRepository
@@ -111,13 +111,24 @@ class HistorialVentaActivity : AppCompatActivity() {
 
         toolbar.inflateMenu(R.menu.menu_historial)
         toolbar.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.action_exportar_excel) {
-                exportarReporteExcel()
-                true
-            } else false
+            when (menuItem.itemId) {
+                R.id.action_exportar_excel -> {
+                    exportarReporteExcel()
+                    true
+                }
+                R.id.action_limpiar_historial -> {
+                    if (sessionManager.isAdmin) {
+                        confirmarVaciarHistorial()
+                    } else {
+                        Toast.makeText(this, "Solo el Administrador puede vaciar el historial", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+                else -> false
+            }
         }
 
-        toolbar.subtitle = if (sessionManager.isAdmin) "Administrador" else "Vendedor"
+        toolbar.subtitle = if (sessionManager.isAdmin) "Reportes y Ventas (Admin)" else "Historial de Ventas"
         toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -262,16 +273,12 @@ class HistorialVentaActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_inventario -> {
-                    if (sessionManager.isAdmin) {
-                        val intent = Intent(this, RegistroProductoActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        }
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Acceso exclusivo para Administrador", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, InventarioMainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
                     true
                 }
                 R.id.nav_historial -> true
@@ -290,9 +297,15 @@ class HistorialVentaActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = VentaAdapter(emptyList()) { venta ->
-            mostrarDetallesVenta(venta)
-        }
+        adapter = VentaAdapter(
+            list = emptyList(),
+            onItemClick = { venta ->
+                mostrarDetallesVenta(venta)
+            },
+            onDeleteClick = { venta ->
+                confirmarEliminarVenta(venta)
+            }
+        )
         rvHistorial.layoutManager = LinearLayoutManager(this)
         rvHistorial.adapter = adapter
     }
@@ -302,7 +315,6 @@ class HistorialVentaActivity : AppCompatActivity() {
             currentVentasList = list
             adapter.updateVentas(list)
 
-            // Filtrar solo las ventas activas (no inhabilitadas) para los cálculos de totales
             val ventasActivas = list.filter { it.estado != "INHABILITADA" && it.estado != "ANULADA" }
             val total = ventasActivas.sumOf { it.total }
             val count = ventasActivas.size
@@ -334,7 +346,8 @@ class HistorialVentaActivity : AppCompatActivity() {
                     db.productoDao().getByIdSync(d.productoId)
                 }
                 val nombre = prod?.nombre ?: "Producto #${d.productoId}"
-                sb.append("• $nombre x${d.cantidad} = ${d.subtotalLinea.formatSoles()}\n")
+                val cantStr = if (d.cantidad % 1.0 == 0.0) "${d.cantidad.toInt()}" else String.format(Locale.US, "%.2f kg", d.cantidad)
+                sb.append("• $nombre x$cantStr = ${d.subtotalLinea.formatSoles()}\n")
             }
 
             sb.append("\nTOTAL: ${venta.total.formatSoles()}")
@@ -344,10 +357,9 @@ class HistorialVentaActivity : AppCompatActivity() {
                 .setMessage(sb.toString())
                 .setPositiveButton("Cerrar", null)
 
-            // Si es ADMIN y la venta no está inhabilitada, permitimos inhabilitar y restaurar stock
-            if (sessionManager.isAdmin && venta.estado != "INHABILITADA" && venta.estado != "ANULADA") {
-                builder.setNeutralButton("Inhabilitar Venta") { _, _ ->
-                    confirmarInhabilitarVenta(venta)
+            if (sessionManager.isAdmin) {
+                builder.setNeutralButton("🗑️ Eliminar Venta") { _, _ ->
+                    confirmarEliminarVenta(venta)
                 }
             }
 
@@ -355,30 +367,56 @@ class HistorialVentaActivity : AppCompatActivity() {
         }
     }
 
-    private fun confirmarInhabilitarVenta(venta: Venta) {
+    private fun confirmarEliminarVenta(venta: Venta) {
         AlertDialog.Builder(this)
-            .setTitle("Inhabilitar Venta")
-            .setMessage("¿Deseas bloquear e inhabilitar la venta ${venta.codigoVenta}?\n\nLos productos vendidos serán devueltos inmediatamente al stock del inventario.")
-            .setPositiveButton("Sí, Inhabilitar") { _, _ ->
-                ejecutarInhabilitacion(venta.id)
+            .setTitle("Eliminar Venta")
+            .setMessage("¿Deseas eliminar permanentemente la venta '${venta.codigoVenta}'?\n\nLos productos vendidos serán restituidos al stock del inventario.")
+            .setPositiveButton("Eliminar") { _, _ ->
+                ejecutarEliminacionVenta(venta)
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    private fun ejecutarInhabilitacion(ventaId: Int) {
+    private fun ejecutarEliminacionVenta(venta: Venta) {
         lifecycleScope.launch {
-            val api = MinimarketApiProvider.getApi(this@HistorialVentaActivity)
-            val res = api.inhabilitarVenta(ventaId)
-            when (res) {
-                is ApiResponse.Success -> {
-                    Toast.makeText(this@HistorialVentaActivity, res.message ?: "Venta inhabilitada con éxito", Toast.LENGTH_LONG).show()
+            val db = AppDatabase.getInstance(this@HistorialVentaActivity)
+            withContext(Dispatchers.IO) {
+                // Devolver stock
+                val detalles = db.detalleVentaDao().getByVentaIdList(venta.id)
+                for (d in detalles) {
+                    val p = db.productoDao().getByIdSync(d.productoId)
+                    if (p != null) {
+                        val stockRestaurado = (p.stock + d.cantidad).toInt()
+                        db.productoDao().actualizarStock(p.id, stockRestaurado)
+                    }
                 }
-                is ApiResponse.Error -> {
-                    Toast.makeText(this@HistorialVentaActivity, res.message, Toast.LENGTH_LONG).show()
+                // Eliminar detalles y venta
+                db.detalleVentaDao().deleteByVentaId(venta.id)
+                db.ventaDao().delete(venta)
+                JsonDatabaseManager.syncAndSaveJsonFile(this@HistorialVentaActivity, db)
+            }
+            Toast.makeText(this@HistorialVentaActivity, "✓ Venta eliminada y stock restituido", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun confirmarVaciarHistorial() {
+        AlertDialog.Builder(this)
+            .setTitle("Vaciar Todo el Historial")
+            .setMessage("¿Estás seguro de vaciar todo el registro de ventas del historial?\nEsta acción no se puede deshacer.")
+            .setPositiveButton("Vaciar Todo") { _, _ ->
+                lifecycleScope.launch {
+                    val db = AppDatabase.getInstance(this@HistorialVentaActivity)
+                    withContext(Dispatchers.IO) {
+                        db.detalleVentaDao().deleteAll()
+                        db.ventaDao().deleteAll()
+                        JsonDatabaseManager.syncAndSaveJsonFile(this@HistorialVentaActivity, db)
+                    }
+                    Toast.makeText(this@HistorialVentaActivity, "Historial vaciado completamente", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun exportarReporteExcel() {
@@ -393,18 +431,19 @@ class HistorialVentaActivity : AppCompatActivity() {
                 val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
                 val sb = StringBuilder()
 
-                // UTF-8 BOM para compatibilidad directa con Microsoft Excel
-                sb.append("\uFEFF")
-                // Cabeceras Excel CSV
-                sb.append("Codigo Venta,Fecha,Metodo de Pago,Subtotal (S/),IGV (S/),Total (S/),Estado,Productos Detalle\n")
+                sb.append("\uFEFF") // UTF-8 BOM para Excel
+                sb.append("Codigo Venta,Fecha,Metodo de Pago,Subtotal (S/),IGV (S/),Total (S/),Estado,Detalle Productos\n")
 
                 for (v in currentVentasList) {
                     val prodsText = withContext(Dispatchers.IO) {
                         val detalles = db.detalleVentaDao().getByVentaIdList(v.id)
-                        detalles.map { d ->
-                            val p = db.productoDao().getById(d.productoId)
-                            "${p?.nombre ?: "Prod"} (x${d.cantidad})"
-                        }.joinToString("; ")
+                        val listFormatted = mutableListOf<String>()
+                        for (d in detalles) {
+                            val p = db.productoDao().getByIdSync(d.productoId)
+                            val cantStr = if (d.cantidad % 1.0 == 0.0) "${d.cantidad.toInt()}" else String.format(Locale.US, "%.2f kg", d.cantidad)
+                            listFormatted.add("${p?.nombre ?: "Prod"} (x$cantStr)")
+                        }
+                        listFormatted.joinToString("; ")
                     }
                     val fechaFormateada = sdf.format(Date(v.fecha))
                     sb.append("\"${v.codigoVenta}\",")
@@ -417,32 +456,28 @@ class HistorialVentaActivity : AppCompatActivity() {
                     sb.append("\"${prodsText.replace("\"", "'")}\"\n")
                 }
 
-                val fileName = "Reporte_Ventas_Minimarket_${System.currentTimeMillis()}.csv"
+                val fileName = "Reporte_Ventas_${System.currentTimeMillis()}.csv"
                 val file = File(cacheDir, fileName)
                 val fos = FileOutputStream(file)
                 fos.write(sb.toString().toByteArray(Charsets.UTF_8))
                 fos.flush()
                 fos.close()
 
-                val uri: Uri = try {
-                    FileProvider.getUriForFile(
-                        this@HistorialVentaActivity,
-                        "${applicationContext.packageName}.provider",
-                        file
-                    )
-                } catch (e: Exception) {
-                    Uri.fromFile(file)
-                }
+                val uri: Uri = FileProvider.getUriForFile(
+                    this@HistorialVentaActivity,
+                    "${applicationContext.packageName}.provider",
+                    file
+                )
 
                 val sendIntent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/csv"
-                    putExtra(Intent.EXTRA_SUBJECT, "Reporte de Ventas Minimarket")
-                    putExtra(Intent.EXTRA_TEXT, "Adjunto reporte de ventas generado desde Minimarket App.")
+                    putExtra(Intent.EXTRA_SUBJECT, "Reporte de Ventas - Minimarket")
+                    putExtra(Intent.EXTRA_TEXT, "Adjunto reporte de ventas exportado desde el sistema de Minimarket.")
                     putExtra(Intent.EXTRA_STREAM, uri)
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
 
-                startActivity(Intent.createChooser(sendIntent, "Compartir / Guardar Reporte Excel"))
+                startActivity(Intent.createChooser(sendIntent, "Exportar / Compartir Reporte"))
 
             } catch (e: Exception) {
                 Toast.makeText(this@HistorialVentaActivity, "Error al generar reporte: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
@@ -452,7 +487,8 @@ class HistorialVentaActivity : AppCompatActivity() {
 
     class VentaAdapter(
         private var list: List<Venta>,
-        private val onItemClick: (Venta) -> Unit
+        private val onItemClick: (Venta) -> Unit,
+        private val onDeleteClick: (Venta) -> Unit
     ) : RecyclerView.Adapter<VentaAdapter.VentaViewHolder>() {
 
         class VentaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -461,6 +497,7 @@ class HistorialVentaActivity : AppCompatActivity() {
             val tvFecha: TextView = view.findViewById(R.id.tvFecha)
             val tvMetodoPago: TextView = view.findViewById(R.id.tvMetodoPago)
             val tvEstadoVenta: TextView = view.findViewById(R.id.tvEstadoVenta)
+            val btnEliminar: ImageButton = view.findViewById(R.id.btnEliminarVentaItem)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VentaViewHolder {
@@ -477,20 +514,18 @@ class HistorialVentaActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             holder.tvFecha.text = sdf.format(Date(venta.fecha))
 
-            // Configurar badge según estado (COMPLETADA vs INHABILITADA)
             val estado = venta.estado.uppercase(Locale.getDefault())
             holder.tvEstadoVenta.text = estado
             if (estado == "INHABILITADA" || estado == "ANULADA") {
-                holder.tvEstadoVenta.setBackgroundColor(ContextCompat.getColor(context, R.color.rojo_alerta))
+                holder.tvEstadoVenta.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.rojo_alerta))
                 holder.tvTotalVenta.setTextColor(ContextCompat.getColor(context, R.color.texto_secundario))
                 holder.itemView.alpha = 0.7f
             } else {
-                holder.tvEstadoVenta.setBackgroundColor(ContextCompat.getColor(context, R.color.verde_nav))
+                holder.tvEstadoVenta.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.verde_nav))
                 holder.tvTotalVenta.setTextColor(ContextCompat.getColor(context, R.color.verde_ganancia))
                 holder.itemView.alpha = 1.0f
             }
 
-            // Configurar el badge según Método de Pago
             val metodo = venta.metodoPago.uppercase(Locale.getDefault())
             holder.tvMetodoPago.text = metodo
 
@@ -501,10 +536,14 @@ class HistorialVentaActivity : AppCompatActivity() {
                 else -> R.color.color_efectivo
             }
 
-            holder.tvMetodoPago.setBackgroundColor(ContextCompat.getColor(context, colorRes))
+            holder.tvMetodoPago.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, colorRes))
 
             holder.itemView.setOnClickListener {
                 onItemClick(venta)
+            }
+
+            holder.btnEliminar.setOnClickListener {
+                onDeleteClick(venta)
             }
         }
 

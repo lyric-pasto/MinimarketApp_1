@@ -41,7 +41,7 @@ class CarritoAdapter(
         holder.tvNombre.text = item.producto.nombre
         holder.tvPrecio.text = "${item.producto.precioVenta.formatSoles()} c/u"
         holder.tvSubtotalLinea.text = "Subtotal: ${item.subtotalLinea.formatSoles()}"
-        holder.tvCantidad.text = item.cantidad.toString()
+        holder.tvCantidad.text = item.cantidadFormateada
 
         if (!item.producto.imagenPath.isNullOrEmpty()) {
             Glide.with(holder.itemView.context)

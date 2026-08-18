@@ -187,7 +187,7 @@ class MinimarketApiClient(private val context: Context) {
                     )
                 )
                 val currentProd = productoDao.getByIdSync(item.producto.id)
-                val nuevoStock = ((currentProd?.stock ?: item.producto.stock) - item.cantidad).coerceAtLeast(0)
+                val nuevoStock = ((currentProd?.stock ?: item.producto.stock) - item.cantidad).toInt().coerceAtLeast(0)
                 productoDao.updateStock(item.producto.id, nuevoStock)
             }
 

@@ -20,4 +20,10 @@ interface DetalleVentaDao {
 
     @Query("SELECT * FROM detalles_venta WHERE ventaId = :ventaId")
     suspend fun getByVentaIdList(ventaId: Int): List<DetalleVenta>
+
+    @Query("DELETE FROM detalles_venta WHERE ventaId = :ventaId")
+    suspend fun deleteByVentaId(ventaId: Int)
+
+    @Query("DELETE FROM detalles_venta")
+    suspend fun deleteAll()
 }

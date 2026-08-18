@@ -1,6 +1,7 @@
 package com.aplicaion.minimarketapp.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,8 +17,17 @@ interface VentaDao {
     @Update
     suspend fun update(venta: Venta)
 
+    @Delete
+    suspend fun delete(venta: Venta)
+
     @Query("UPDATE ventas SET estado = :estado WHERE id = :id")
     suspend fun updateEstado(id: Int, estado: String)
+
+    @Query("DELETE FROM ventas WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
+    @Query("DELETE FROM ventas")
+    suspend fun deleteAll()
 
     @Query("SELECT * FROM ventas ORDER BY fecha DESC")
     fun getAll(): Flow<List<Venta>>

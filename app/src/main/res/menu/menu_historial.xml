@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_exportar_excel"
-        android:title="Exportar Reporte Excel"
-        android:icon="@android:drawable/ic_menu_share"
+        android:title="Exportar Reporte"
+        android:icon="@drawable/ic_share"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_limpiar_historial"
+        android:title="Vaciar Historial"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"/>
 </menu>

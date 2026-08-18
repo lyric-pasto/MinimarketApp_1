@@ -20,15 +20,6 @@
       "contrasena": "cajero123",
       "rol": "VENDEDOR",
       "estado": "activo"
-    },
-    {
-      "id": 3,
-      "nombreCompleto": "Supervisora Maria Flores",
-      "usuario": "supervisor",
-      "correo": "maria.supervisor@minimarket.com",
-      "contrasena": "super123",
-      "rol": "ADMIN",
-      "estado": "activo"
     }
   ],
   "categorias": [
@@ -253,7 +244,40 @@
       "descripcion": "Fideos Spaghetti de trigo durum 1 kilo (Stock Bajo)",
       "codigoBarras": "7751234567802",
       "proveedorId": 2,
-      "imagenPath": "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400"
+      "imagenPath": "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400",
+      "esPorPeso": false,
+      "unidadMedida": "UND",
+      "tipoVenta": "UNIDAD"
+    },
+    {
+      "id": 13,
+      "nombre": "Plátano de Seda (x Kg)",
+      "categoriaId": 1,
+      "precioCompra": 2.20,
+      "precioVenta": 3.80,
+      "stock": 40,
+      "descripcion": "Plátano de seda fresco por kilo",
+      "codigoBarras": "7751234567803",
+      "proveedorId": 1,
+      "imagenPath": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400",
+      "esPorPeso": true,
+      "unidadMedida": "KG",
+      "tipoVenta": "PESO"
+    },
+    {
+      "id": 14,
+      "nombre": "Manzana Royal Gala (x Kg)",
+      "categoriaId": 1,
+      "precioCompra": 3.50,
+      "precioVenta": 5.50,
+      "stock": 30,
+      "descripcion": "Manzana dulce seleccionada por kilo",
+      "codigoBarras": "7751234567804",
+      "proveedorId": 2,
+      "imagenPath": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400",
+      "esPorPeso": true,
+      "unidadMedida": "KG",
+      "tipoVenta": "PESO"
     }
   ]
 }

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_general">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="62dp">
+
+        <!-- TOOLBAR -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarInventario"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/verde_nav"
+            app:title="Inventario y Catálogo"
+            app:titleTextColor="@color/white"
+            app:subtitle="Panel de Gestión"
+            app:subtitleTextColor="#D1FAE5" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MÓDULOS DE GESTIÓN"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- TARJETA 1: PRODUCTOS -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardModuloProductos"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/fondo_card"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:strokeColor="#CBD5E1"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <FrameLayout
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:background="@drawable/bg_boton_redondo"
+                            android:backgroundTint="#EFF6FF">
+
+                            <ImageView
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_inventario"
+                                app:tint="#2563EB" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Productos"
+                                android:textColor="@color/texto_principal"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSubtituloProductos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="Crear, editar catálogo, stock y precios"
+                                android:textColor="@color/texto_secundario"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icono_regresar_pantalla"
+                            android:rotation="180"
+                            app:tint="@color/texto_hint" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- TARJETA 2: CATEGORÍAS (Estilo Carpetas) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardModuloCategorias"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/fondo_card"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:strokeColor="#CBD5E1"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <FrameLayout
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:background="@drawable/bg_boton_redondo"
+                            android:backgroundTint="#FEF3C7">
+
+                            <ImageView
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_folder"
+                                app:tint="#D97706" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Categorías"
+                                android:textColor="@color/texto_principal"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSubtituloCategorias"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="Estructura en carpetas con conteo de productos"
+                                android:textColor="@color/texto_secundario"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icono_regresar_pantalla"
+                            android:rotation="180"
+                            app:tint="@color/texto_hint" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- TARJETA 3: REPORTES -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardModuloReportes"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/fondo_card"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:strokeColor="#CBD5E1"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <FrameLayout
+                            android:layout_width="68dp"
+                            android:layout_height="68dp"
+                            android:background="@drawable/bg_boton_redondo"
+                            android:backgroundTint="#F3E8FF">
+
+                            <ImageView
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_reportes"
+                                app:tint="@color/morado_scanner" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reportes"
+                                android:textColor="@color/texto_principal"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSubtituloReportes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="Generar reportes, exportar a Excel y anular"
+                                android:textColor="@color/texto_secundario"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/icono_regresar_pantalla"
+                            android:rotation="180"
+                            app:tint="@color/texto_hint" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <!-- MENÚ INFERIOR FIJO -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom"
+        android:background="@color/verde_nav"
+        app:elevation="8dp"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:itemActiveIndicatorStyle="@null"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
         Venta::class,
         DetalleVenta::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -54,7 +54,6 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     Constants.DATABASE_NAME
                 )
-                    .addCallback(DatabaseCallback(context.applicationContext))
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

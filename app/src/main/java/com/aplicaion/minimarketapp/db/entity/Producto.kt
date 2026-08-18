@@ -19,5 +19,8 @@ data class Producto(
     val descripcion: String = "",
     val codigoBarras: String,
     val proveedorId: Int? = null,
-    val imagenPath: String? = null
+    val imagenPath: String? = null,
+    val esPorPeso: Boolean = false,
+    val unidadMedida: String = "UND", // "UND", "KG", "PAQ", "G"
+    val tipoVenta: String = "UNIDAD" // "UNIDAD", "PESO"
 )

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_general"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarProductosCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/fondo_card"
+        app:navigationIcon="@drawable/icono_regresar_pantalla"
+        app:navigationIconTint="@color/texto_principal"
+        app:title="Productos en Carpeta"
+        app:titleTextColor="@color/texto_principal"
+        app:subtitleTextColor="@color/texto_secundario" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
+
+    <!-- BANNER DE CARPETA ACTUAL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fondo_card"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_folder"
+            app:tint="#D97706" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNombreCarpetaHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abarrotes"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvConteoCarpetaHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Archivos de productos en esta categoría"
+                android:textColor="@color/texto_secundario"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNuevoProductoEnCarpeta"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="12dp"
+            android:text="+ Producto"
+            android:textSize="12sp"
+            app:backgroundTint="@color/morado_scanner"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0" />
+
+    <!-- LISTA DE PRODUCTOS COMO ARCHIVOS -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProductosEnCarpeta"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp" />
+
+</LinearLayout>

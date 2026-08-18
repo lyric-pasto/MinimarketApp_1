@@ -48,7 +48,7 @@ class VentaViewModel(private val ventaRepository: VentaRepository) : ViewModel()
                 _ventaResult.value = Resource.Error("Producto sin stock disponible")
                 return
             }
-            list.add(ItemCarrito(producto, 1))
+            list.add(ItemCarrito(producto, 1.0))
         }
 
         _carrito.value = list

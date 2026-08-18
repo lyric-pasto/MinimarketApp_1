@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardProductoItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/fondo_card"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#E2E8F0"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <!-- CONTENEDOR DE IMAGEN CON BADGE DE TIPO DE VENTA -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/ivProductoGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_product_placeholder" />
+
+            <!-- Badge Tipo de Venta (Peso / Unidad) -->
+            <TextView
+                android:id="@+id/tvBadgeTipoVenta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_margin="3dp"
+                android:background="@drawable/bg_badge_rol"
+                android:backgroundTint="@color/morado_scanner"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="1dp"
+                android:text="⚖️ KG"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <!-- Indicador Stock Bajo -->
+            <TextView
+                android:id="@+id/tvBadgeAlertaStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_margin="3dp"
+                android:background="@drawable/bg_badge_rol"
+                android:backgroundTint="@color/rojo_alerta"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="1dp"
+                android:text="Bajo"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- NOMBRE DEL PRODUCTO -->
+        <TextView
+            android:id="@+id/tvNombreProductoGrid"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="2"
+            android:text="Coca Cola 3L"
+            android:textColor="@color/texto_principal"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- PRECIO Y STOCK -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvPrecioGrid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="S/ 11.00"
+                android:textColor="@color/verde_ganancia"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStockGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 u"
+                android:textColor="@color/texto_secundario"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- BOTÓN RÁPIDO AGREGAR / SELECCIONAR -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAccionGrid"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginTop="4dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="+ Añadir"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/verde_nav"
+            app:cornerRadius="6dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

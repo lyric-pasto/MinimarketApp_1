@@ -31,6 +31,8 @@ class inicio_sesion : AppCompatActivity() {
     private lateinit var btnIngresar: MaterialButton
     private lateinit var btnRegistroUsuario: TextView
     private lateinit var btnRecuperarCorreo: TextView
+    private lateinit var btnQuickAdmin: MaterialButton
+    private lateinit var btnQuickCajero: MaterialButton
 
     private val authViewModel: AuthViewModel by viewModels {
         val db = AppDatabase.getInstance(this)
@@ -43,15 +45,38 @@ class inicio_sesion : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_inicio_sesion)
 
+        // Asegurar que la base de datos se encuentre poblada con los datos del JSON
+        lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            val db = AppDatabase.getInstance(applicationContext)
+            com.aplicaion.minimarketapp.api.JsonDatabaseManager.seedDatabaseFromAssets(applicationContext, db)
+        }
+
         txtUsuario = findViewById(R.id.txtUsuario)
         txtContrasena = findViewById(R.id.txtContraseña)
         btnIngresar = findViewById(R.id.btnIngresar)
         btnRegistroUsuario = findViewById(R.id.btnRegistroUsuario)
         btnRecuperarCorreo = findViewById(R.id.btnRecuperarCorreo)
+        btnQuickAdmin = findViewById(R.id.btnQuickAdmin)
+        btnQuickCajero = findViewById(R.id.btnQuickCajero)
+
+        // Botones de acceso rápido para pruebas con credenciales del JSON
+        btnQuickAdmin.setOnClickListener {
+            txtUsuario.setText("admin")
+            txtContrasena.setText("admin123")
+        }
+
+        btnQuickCajero.setOnClickListener {
+            txtUsuario.setText("cajero1")
+            txtContrasena.setText("cajero123")
+        }
 
         btnIngresar.setOnClickListener {
-            val user = txtUsuario.text?.toString().orEmpty()
-            val pass = txtContrasena.text?.toString().orEmpty()
+            val user = txtUsuario.text?.toString()?.trim().orEmpty()
+            val pass = txtContrasena.text?.toString()?.trim().orEmpty()
+            if (user.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Por favor ingrese su usuario y contraseña", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             authViewModel.login(user, pass)
         }
 

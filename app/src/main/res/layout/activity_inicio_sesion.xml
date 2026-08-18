@@ -8,154 +8,210 @@
     android:layout_height="match_parent"
     tools:context=".inicio_sesion">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="305dp"
-                android:layout_height="260dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/icono_minimarket_app"
-                app:layout_constraintDimensionRatio="7:4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MinimarketApp"
-            android:textAlignment="center"
-            android:layout_marginTop="8dp"
-            style="@style/titulo_grande" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gestor de Ventas"
-            android:textAlignment="center"
-            android:textColor="@color/texto_secundario"
-            android:textSize="15sp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            app:startIconDrawable="@drawable/icono_usuario"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ingrese su usuario"
-                android:paddingStart="48dp"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            app:startIconDrawable="@drawable/icono_llave"
-            app:passwordToggleEnabled="true"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtContraseña"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ingrese su contraseña"
-                android:inputType="textPassword"
-                android:paddingStart="48dp"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnIngresar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Ingresar"
-            android:textColor="@color/texto_sobre_verde"
-            android:backgroundTint="@color/verde_nav"
-            app:cornerRadius="8dp" />
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="16dp">
+            android:paddingBottom="24dp">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="16dp">
+                <ImageView
+                    android:layout_width="305dp"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/icono_minimarket_app"
+                    app:layout_constraintDimensionRatio="7:4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MinimarketApp"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                style="@style/titulo_grande" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gestor de Ventas e Inventario"
+                android:textAlignment="center"
                 android:textColor="@color/texto_secundario"
-                android:text="¿Olvidaste tu contraseña?"/>
+                android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/verde_ganancia"
-                android:id="@+id/btnRecuperarCorreo"
-                android:text="Recuperar con correo"
-                android:textStyle="bold"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#B2DFDB"
+                app:cardBackgroundColor="#E0F2F1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Acceso Rápido (Cuentas de Prueba):"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#00695C" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnQuickAdmin"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingHorizontal="4dp"
+                            android:text="1. Admin"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnQuickCajero"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="38dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingHorizontal="4dp"
+                            android:text="2. Cajero / Vendedor"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/icono_usuario"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese su usuario o correo"
+                    android:paddingStart="48dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:startIconDrawable="@drawable/icono_llave"
+                app:passwordToggleEnabled="true"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtContraseña"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese su contraseña"
+                    android:inputType="textPassword"
+                    android:paddingStart="48dp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIngresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:text="Ingresar al Sistema"
+                android:textColor="@color/texto_sobre_verde"
+                android:backgroundTint="@color/verde_nav"
+                app:cornerRadius="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/texto_secundario"
+                    android:text="¿Olvidaste tu contraseña? "/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/verde_ganancia"
+                    android:id="@+id/btnRecuperarCorreo"
+                    android:text="Recuperar con correo"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/texto_secundario"
+                    android:text="¿Aún no tienes una cuenta? "/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¡Regístrate aquí!"
+                    android:textColor="@color/verde_ganancia"
+                    android:textStyle="bold"
+                    android:id="@+id/btnRegistroUsuario"/>
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="16dp">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@color/texto_secundario"
-                android:text="¿Aún no tenes una cuenta?"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="¿Registrate aquí?"
-                android:textColor="@color/verde_ganancia"
-                android:textStyle="bold"
-                android:id="@+id/btnRegistroUsuario"/>
-        </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

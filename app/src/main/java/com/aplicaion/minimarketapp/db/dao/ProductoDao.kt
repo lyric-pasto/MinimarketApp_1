@@ -35,6 +35,9 @@ interface ProductoDao {
     @Query("SELECT * FROM productos WHERE codigoBarras = :codigo LIMIT 1")
     suspend fun getByCodigo(codigo: String): Producto?
 
+    @Query("SELECT * FROM productos WHERE codigoBarras = :codigo LIMIT 1")
+    suspend fun getByCodigoSync(codigo: String): Producto?
+
     @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
     suspend fun getById(id: Int): Producto?
 
@@ -50,9 +53,15 @@ interface ProductoDao {
     @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")
     suspend fun updateStock(productoId: Int, nuevoStock: Int)
 
+    @Query("UPDATE productos SET stock = :nuevoStock WHERE id = :productoId")
+    suspend fun actualizarStock(productoId: Int, nuevoStock: Int)
+
     @Query("SELECT * FROM productos WHERE nombre LIKE '%' || :query || '%' OR codigoBarras LIKE '%' || :query || '%' ORDER BY nombre ASC")
     fun searchProductos(query: String): Flow<List<Producto>>
 
     @Query("SELECT COUNT(*) FROM productos")
     suspend fun getCount(): Int
+
+    @Query("SELECT COUNT(*) FROM productos WHERE categoriaId = :categoriaId")
+    suspend fun getCountByCategoria(categoriaId: Int): Int
 }

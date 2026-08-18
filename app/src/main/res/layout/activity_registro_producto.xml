@@ -207,12 +207,106 @@
                     android:id="@+id/etNombreProducto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ej: Coca Cola 3 litros"
+                    android:hint="Ej: Arroz Costeño Granel / Coca Cola"
                     android:textColor="@color/texto_principal"
                     android:textSize="14sp"
                     android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ─── SECCIÓN: VENTA POR PESO O GRANEL ─── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="#F8FAFC"
+                app:strokeColor="#CBD5E1"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_scale"
+                            app:tint="@color/morado_scanner" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Venta por Peso / Granel / Suelto"
+                                android:textColor="@color/texto_principal"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Habilita 1/4 kg, 1/2 kg, 3/4 kg y 1 kg en POS"
+                                android:textColor="@color/texto_secundario"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchVentaPorPeso"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <!-- Selector Unidad de Medida (Visible si se activa) -->
+                    <LinearLayout
+                        android:id="@+id/layoutUnidadMedida"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Unidad de Medida:"
+                            android:textColor="@color/texto_secundario"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerUnidadMedida"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Seleccione"
+                                android:inputType="none"
+                                android:textSize="12sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ─── CAMPOS: Stock + Categoría ─── -->
             <LinearLayout
@@ -229,9 +323,10 @@
                     android:layout_marginEnd="8dp">
 
                     <TextView
+                        android:id="@+id/tvLabelStock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Stock Actual"
+                        android:text="Stock Disponible"
                         android:textColor="@color/texto_principal"
                         android:textSize="13sp"
                         android:textStyle="bold"
@@ -291,7 +386,7 @@
                             android:id="@+id/spinnerCategoria"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Seleccione"
+                            android:hint="Seleccione carpeta"
                             android:textColor="@color/texto_principal"
                             android:inputType="none"
                             android:textSize="13sp" />
@@ -302,21 +397,38 @@
 
             </LinearLayout>
 
-            <!-- ─── CAMPO: Proveedor ─── -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- ─── CAMPO: Proveedor (Desplegable con solo registrados) ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Proveedor"
-                android:textColor="@color/texto_principal"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Proveedor Registrado"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRegistrarNuevoProveedorLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ Registrar Proveedor"
+                    android:textColor="@color/morado_scanner"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:layout_marginBottom="14dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 app:boxCornerRadiusTopStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
@@ -324,14 +436,14 @@
                 app:boxStrokeColor="@color/amarillo_accion"
                 app:hintTextColor="@color/amarillo_accion">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProveedor"
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerProveedor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ej: Empresa AJE"
+                    android:hint="Seleccione un proveedor registrado"
                     android:textColor="@color/texto_principal"
-                    android:textSize="14sp"
-                    android:inputType="textCapSentences" />
+                    android:inputType="none"
+                    android:textSize="13sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -339,7 +451,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Precios"
+                android:text="Precios de Compra y Venta"
                 android:textColor="@color/texto_principal"
                 android:textSize="13sp"
                 android:textStyle="bold"
@@ -363,7 +475,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Compra"
+                        android:text="Costo Compra"
                         android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
@@ -404,7 +516,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Venta"
+                        android:text="Precio Venta"
                         android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
@@ -444,7 +556,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ganancia"
+                        android:text="Margen"
                         android:textColor="@color/texto_secundario"
                         android:textSize="11sp"
                         android:layout_marginBottom="2dp" />
@@ -564,11 +676,11 @@
                     android:id="@+id/etDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ej: Esta bebida se vende mucho en tiempos de verano"
+                    android:hint="Ej: Producto de alta demanda para ventas por peso o empaque"
                     android:textColor="@color/texto_principal"
                     android:textSize="14sp"
-                    android:minLines="3"
-                    android:maxLines="5"
+                    android:minLines="2"
+                    android:maxLines="4"
                     android:gravity="top|start"
                     android:inputType="textMultiLine|textCapSentences"
                     android:maxLength="200" />
@@ -582,7 +694,7 @@
                 android:layout_height="52dp"
                 android:layout_gravity="center_horizontal"
                 android:paddingHorizontal="48dp"
-                android:text="Guardar"
+                android:text="Guardar Producto"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/texto_sobre_amarillo"

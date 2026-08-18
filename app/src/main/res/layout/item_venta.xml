@@ -43,6 +43,17 @@
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
+            <!-- Botón Eliminar / Anular Venta -->
+            <ImageButton
+                android:id="@+id/btnEliminarVentaItem"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Eliminar venta"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/rojo_alerta" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -67,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:text="COMPLETADA"
                 android:textColor="@color/white"
-                android:background="@color/verde_nav"
+                android:background="@drawable/bg_badge_rol"
+                android:backgroundTint="@color/verde_nav"
                 android:textSize="10sp"
                 android:textStyle="bold"
                 android:paddingHorizontal="8dp"
@@ -81,7 +93,8 @@
                 android:layout_height="wrap_content"
                 android:text="EFECTIVO"
                 android:textColor="@color/white"
-                android:background="@color/color_efectivo"
+                android:background="@drawable/bg_badge_rol"
+                android:backgroundTint="@color/color_efectivo"
                 android:textSize="10sp"
                 android:textStyle="bold"
                 android:paddingHorizontal="8dp"

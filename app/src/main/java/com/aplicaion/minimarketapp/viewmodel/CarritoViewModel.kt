@@ -11,10 +11,25 @@ import kotlinx.coroutines.flow.stateIn
 
 data class ItemCarrito(
     val producto: Producto,
-    val cantidad: Int
+    val cantidad: Double = 1.0,
+    val etiquetaPeso: String? = null
 ) {
     val subtotalLinea: Double
         get() = producto.precioVenta * cantidad
+
+    val cantidadFormateada: String
+        get() {
+            return if (producto.esPorPeso || producto.tipoVenta == "PESO") {
+                if (cantidad == 0.25) "1/4 kg (0.25 kg)"
+                else if (cantidad == 0.50) "1/2 kg (0.50 kg)"
+                else if (cantidad == 0.75) "3/4 kg (0.75 kg)"
+                else if (cantidad == 1.00) "1.00 kg"
+                else String.format(java.util.Locale.US, "%.2f kg", cantidad)
+            } else {
+                if (cantidad % 1.0 == 0.0) "${cantidad.toInt()} und"
+                else String.format(java.util.Locale.US, "%.2f und", cantidad)
+            }
+        }
 }
 
 class CarritoViewModel : ViewModel() {
@@ -23,7 +38,7 @@ class CarritoViewModel : ViewModel() {
     val items: StateFlow<List<ItemCarrito>> = _items
 
     val totalItems: StateFlow<Int> = _items.map { list ->
-        list.sumOf { it.cantidad }
+        list.size
     }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
     val total: StateFlow<Double> = _items.map { list ->
@@ -40,18 +55,19 @@ class CarritoViewModel : ViewModel() {
         tot - (tot / 1.18)
     }.stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
-    fun agregar(producto: Producto): Boolean {
+    fun agregar(producto: Producto, cantidad: Double = 1.0, etiquetaPeso: String? = null): Boolean {
         if (producto.stock <= 0) return false
         val lista = _sharedItems.value.toMutableList()
-        val index = lista.indexOfFirst { it.producto.id == producto.id }
+        val index = lista.indexOfFirst { it.producto.id == producto.id && it.etiquetaPeso == etiquetaPeso }
         if (index != -1) {
             val actual = lista[index]
-            if (actual.cantidad >= producto.stock) {
+            val nuevaCant = actual.cantidad + cantidad
+            if (nuevaCant > producto.stock) {
                 return false
             }
-            lista[index] = actual.copy(cantidad = actual.cantidad + 1)
+            lista[index] = actual.copy(cantidad = nuevaCant)
         } else {
-            lista.add(ItemCarrito(producto, 1))
+            lista.add(ItemCarrito(producto, cantidad, etiquetaPeso))
         }
         _sharedItems.value = lista.toList()
         return true
@@ -62,10 +78,12 @@ class CarritoViewModel : ViewModel() {
         val index = lista.indexOfFirst { it.producto.id == productoId }
         if (index != -1) {
             val actual = lista[index]
-            if (actual.cantidad >= actual.producto.stock) {
+            val paso = if (actual.producto.esPorPeso || actual.producto.tipoVenta == "PESO") 0.25 else 1.0
+            val nuevaCant = actual.cantidad + paso
+            if (nuevaCant > actual.producto.stock) {
                 return false
             }
-            lista[index] = actual.copy(cantidad = actual.cantidad + 1)
+            lista[index] = actual.copy(cantidad = nuevaCant)
             _sharedItems.value = lista.toList()
             return true
         }
@@ -81,8 +99,10 @@ class CarritoViewModel : ViewModel() {
         val index = lista.indexOfFirst { it.producto.id == productoId }
         if (index != -1) {
             val actual = lista[index]
-            if (actual.cantidad > 1) {
-                lista[index] = actual.copy(cantidad = actual.cantidad - 1)
+            val paso = if (actual.producto.esPorPeso || actual.producto.tipoVenta == "PESO") 0.25 else 1.0
+            val nuevaCant = actual.cantidad - paso
+            if (nuevaCant > 0.01) {
+                lista[index] = actual.copy(cantidad = nuevaCant)
             } else {
                 lista.removeAt(index)
             }

@@ -108,7 +108,7 @@ class ProveedorActivity : AppCompatActivity() {
                 }
                 R.id.nav_inventario -> {
                     if (sessionManager.isAdmin) {
-                        val intent = Intent(this, RegistroProductoActivity::class.java).apply {
+                        val intent = Intent(this, InventarioMainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
                         startActivity(intent)

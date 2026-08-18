@@ -20,10 +20,10 @@ interface UsuarioDao {
     @Delete
     suspend fun delete(usuario: Usuario)
 
-    @Query("SELECT * FROM usuarios WHERE (usuario = :usuario OR correo = :usuario) AND contrasena = :contrasena AND estado = 'activo' LIMIT 1")
+    @Query("SELECT * FROM usuarios WHERE (LOWER(TRIM(usuario)) = LOWER(TRIM(:usuario)) OR LOWER(TRIM(correo)) = LOWER(TRIM(:usuario))) AND TRIM(contrasena) = TRIM(:contrasena) AND LOWER(estado) = 'activo' LIMIT 1")
     suspend fun findByUsuarioYContrasena(usuario: String, contrasena: String): Usuario?
 
-    @Query("SELECT * FROM usuarios WHERE (usuario = :usuario OR correo = :usuario) AND contrasena = :contrasena LIMIT 1")
+    @Query("SELECT * FROM usuarios WHERE (LOWER(TRIM(usuario)) = LOWER(TRIM(:usuario)) OR LOWER(TRIM(correo)) = LOWER(TRIM(:usuario))) AND TRIM(contrasena) = TRIM(:contrasena) LIMIT 1")
     suspend fun findByUsuarioYContrasenaAnyStatus(usuario: String, contrasena: String): Usuario?
 
     @Query("UPDATE usuarios SET estado = :nuevoEstado WHERE id = :id")
@@ -41,7 +41,7 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios WHERE LOWER(TRIM(correo)) = LOWER(TRIM(:correo)) AND id != :excludeId LIMIT 1")
     suspend fun getByCorreoExcludingId(correo: String, excludeId: Int): Usuario?
 
-    @Query("SELECT * FROM usuarios WHERE usuario = :usuario AND correo = :correo LIMIT 1")
+    @Query("SELECT * FROM usuarios WHERE (LOWER(TRIM(usuario)) = LOWER(TRIM(:usuario)) OR LOWER(TRIM(correo)) = LOWER(TRIM(:correo))) LIMIT 1")
     suspend fun getByUsuarioYCorreo(usuario: String, correo: String): Usuario?
 
     @Query("UPDATE usuarios SET contrasena = :nuevaPass WHERE id = :id")

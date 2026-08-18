@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/fondo_card"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- CABECERA -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_scale"
+            app:tint="@color/morado_scanner" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNombreProductoPeso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Arroz Extra Costeño"
+                android:textColor="@color/texto_principal"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPrecioPorKilo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio: S/ 4.80 por Kilo"
+                android:textColor="@color/verde_ganancia"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="14dp"
+        android:background="#E2E8F0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona peso rápido por defecto:"
+        android:textColor="@color/texto_secundario"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- 4 BOTONES RÁPIDOS POR DEFECTO -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUnCuarto"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            android:text="1/4 kg (0.25 kg)"
+            android:textColor="@color/texto_principal"
+            android:textSize="12sp"
+            app:strokeColor="@color/morado_scanner"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMedioKilo"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            android:text="1/2 kg (0.50 kg)"
+            android:textColor="@color/texto_principal"
+            android:textSize="12sp"
+            app:strokeColor="@color/morado_scanner"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTresCuartos"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            android:text="3/4 kg (0.75 kg)"
+            android:textColor="@color/texto_principal"
+            android:textSize="12sp"
+            app:strokeColor="@color/morado_scanner"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUnKilo"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            android:text="1 kg (1.00 kg)"
+            android:textColor="@color/texto_principal"
+            android:textSize="12sp"
+            app:strokeColor="@color/morado_scanner"
+            app:strokeWidth="1.5dp" />
+    </GridLayout>
+
+    <!-- O INGRESAR PESO PERSONALIZADO -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="O ingresa peso exacto (en Kilogramos):"
+        android:textColor="@color/texto_secundario"
+        android:textSize="12sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:boxStrokeColor="@color/morado_scanner"
+        app:hintTextColor="@color/morado_scanner"
+        app:suffixText="kg">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPesoPersonalizado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej. 0.350, 1.25, 2.0"
+            android:inputType="numberDecimal"
+            android:textSize="15sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- RESUMEN DEL MONTO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="#F1F5F9"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total a cobrar:"
+            android:textColor="@color/texto_principal"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTotalCalculado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S/ 0.00"
+            android:textColor="@color/verde_ganancia"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- BOTONES DE ACCIÓN -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelarPeso"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Cancelar"
+            android:textColor="@color/texto_secundario" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAgregarAlCarritoPeso"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.5"
+            android:text="Agregar al Carrito"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/amarillo_accion"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+</LinearLayout>
